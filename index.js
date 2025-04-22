@@ -663,7 +663,35 @@ function updateType(selectedTypeElement) {
         updateContent(); // Update the card display when type changes
     }
 }
+<!-- Add this after the existing type selector in index.html -->
+<div id="dual-type-container">
+    <div class="type-toggle">
+        <label for="dual-type-toggle">Dual Type:</label>
+        <input type="checkbox" id="dual-type-toggle" name="dual-type-toggle">
+    </div>
+    <div id="second-type-selector" class="hidden">
+        <p>Second Type:</p>
+        <ul id="second-type-list">
+            <li value="grass" class="select-second-type"><img src="img/grass.png" alt="grass"></li>
+            <li value="water" class="select-second-type"><img src="img/water.png" alt="water"></li>
+            <li value="fire" class="select-second-type"><img src="img/fire.png" alt="fire"></li>
+            <li value="normal" class="select-second-type"><img src="img/normal.png" alt="normal"></li>
+            <li value="electric" class="select-second-type"><img src="img/electric.png" alt="electric"></li>
+            <li value="psychic" class="select-second-type"><img src="img/psychic.png" alt="psychic"></li>
+            <li value="fighting" class="select-second-type"><img src="img/fighting.png" alt="fighting"></li>
+            <li value="dark" class="select-second-type"><img src="img/dark.png" alt="dark"></li>
+            <li value="metal" class="select-second-type"><img src="img/metal.png" alt="metal"></li>
+        </ul>
+    </div>
+</div>
 
+<!-- Add this inside the img-drop-container div, after the existing img-drop-small -->
+<div class="img-drop-mask hidden">
+    Drop type mask here.
+</div>
+<div class="img-drop-second hidden">
+    Drop secondary type image here.
+</div>
 
 // ******** ABILITY CREATION ********
 function createAbility() {
