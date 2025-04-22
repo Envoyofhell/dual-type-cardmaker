@@ -9,9 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@900&family=Plus+Jakarta+Sans:wght@800&display=swap" rel="stylesheet">
     <script src="index.js" defer></script>
-    <script src=
-    "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <title>Pokémon Card Maker</title>
 </head>
 <body>
@@ -33,28 +31,12 @@
                         <li value="metal" class="select-type"><img src="img/metal.png" alt="metal"></li>
                     </ul>
                 </div>
-                <!-- Add this after the existing type selector in index.html -->
-<div id="dual-type-container">
-    <div class="type-toggle">
-        <label for="dual-type-toggle">Dual Type:</label>
-        <input type="checkbox" id="dual-type-toggle" name="dual-type-toggle">
-    </div>
-    <div id="second-type-selector" class="hidden">
-        <p>Second Type:</p>
-        <ul id="second-type-list">
-            <li value="grass" class="select-second-type"><img src="img/grass.png" alt="grass"></li>
-            <li value="water" class="select-second-type"><img src="img/water.png" alt="water"></li>
-            <li value="fire" class="select-second-type"><img src="img/fire.png" alt="fire"></li>
-            <li value="normal" class="select-second-type"><img src="img/normal.png" alt="normal"></li>
-            <li value="electric" class="select-second-type"><img src="img/electric.png" alt="electric"></li>
-            <li value="psychic" class="select-second-type"><img src="img/psychic.png" alt="psychic"></li>
-            <li value="fighting" class="select-second-type"><img src="img/fighting.png" alt="fighting"></li>
-            <li value="dark" class="select-second-type"><img src="img/dark.png" alt="dark"></li>
-            <li value="metal" class="select-second-type"><img src="img/metal.png" alt="metal"></li>
-        </ul>
-    </div>
-</div>
-
+                <div id="name-container">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" maxlength="20">
+                    <label for="hp">HP:</label>
+                    <input type="number" id="hp" name="hp" min="10" max="340" step="10">
+                </div>
 <!-------------- STAGE FORMS --------------->
                 <div class="stage-input">
                     <div id="stage-dropdown" class="input-header closed">
@@ -487,22 +469,12 @@
             <div class="img-drop-small">
                 Drop pre-evolution image here.
             </div>
-            
-<!-- Add this inside the img-drop-container div, after the existing img-drop-small -->
-<div class="img-drop-mask hidden">
-    Drop type mask here.
-</div>
-<div class="img-drop-second hidden">
-    Drop secondary type image here.
-</div>
-                <div id="name-container">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" maxlength="20">
-                    <label for="hp">HP:</label>
-                    <input type="number" id="hp" name="hp" min="10" max="340" step="10">
-                </div>
         </div>
         <img id="pokeball" src="img/pokeball.png" alt="">
     </div>
+    
+    <!-- Add the dual-type and sample-masks scripts at the end of the body -->
+    <script src="dual-type.js"></script>
+    <script src="sample-masks.js"></script>
 </body>
 </html>
