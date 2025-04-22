@@ -1060,3 +1060,27 @@ p.focused {
 .card-water-stage-2 {
     background-image: url('img/Stage 2/SS_Stage2_Water.png')
 }
+.img-drop-mask, .img-drop-second {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15vw;
+    height: 15vw;
+    max-width: 200px;
+    max-height: 200px;
+    margin-bottom: 20px;
+    outline: 5px dotted var(--white);
+    border-radius: 15px;
+    box-shadow: 0 0 50px var(--offwhite) inset;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: white;
+    text-shadow: 1px 0 1px #177edf, 0 1px 1px #177edf;
+    transition: 0.3s;
+}
+
+.dual-type-toggle {
+    margin-top: 10px;
+    color: white;
+    text-shadow: 1px 0 1px #177edf, 0 1px 1px #177edf;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
