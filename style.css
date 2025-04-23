@@ -37,7 +37,17 @@ body {
 }
 
 /* * * CARD STYLEs * * */
-
+/* Critical CSS fixes for card element positioning */
+.card-name {
+    position: relative !important;
+    font-size: min(33.6px, 2.1vw) !important;
+    transform: scaleX(0.9) translateX(-7%) !important;
+  }
+  
+  .hp-container {
+    position: relative !important;
+    top: 0.1vw !important;
+  }
 .img-drop-container {
     position: relative;
     display: flex;

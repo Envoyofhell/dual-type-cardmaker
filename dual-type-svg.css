@@ -1,0 +1,80 @@
+/* Dual Type Container Styling */
+#dual-type-container {
+    margin: 15px auto;
+    width: 378px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.type-toggle {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.type-toggle label {
+    margin-right: 10px;
+}
+
+/* Second Type Selector Styling */
+#second-type-selector {
+    margin-top: 10px;
+    width: 100%;
+    transition: opacity 0.3s, height 0.3s;
+}
+
+#second-type-selector.hidden {
+    display: none !important;
+}
+
+#second-type-list {
+    display: flex;
+    list-style-type: none;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.select-second-type {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    outline: 2px solid var(--offwhite);
+    border-radius: 6px;
+    background-color: var(--offwhite);
+    box-shadow: 0 0 15px var(--darkblue) inset;
+    transition: 0.3s;
+    margin: 0 3px;
+}
+
+.select-second-type.highlight {
+    outline: 2px solid white;
+    box-shadow: none;
+    background-color: transparent;
+}
+
+.select-second-type:hover {
+    outline: 2px solid var(--yellow);
+    box-shadow: none;
+    background-color: white;
+}
+
+.select-second-type > img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Card Layer Styling */
+.card {
+    position: relative !important; /* Ensure this is set for absolute positioning inside */
+}
+
+#second-card-layer {
+    pointer-events: none; /* Allow clicks to pass through to the card beneath */
+    transition: background-image 0.3s ease;
+    /* Ensuring clip-path works across browsers */
+    -webkit-clip-path: polygon(0 0, 100% 0, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+}

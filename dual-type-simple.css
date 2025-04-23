@@ -1,0 +1,212 @@
+/* Dual Type Container Styling */
+#dual-type-container {
+    margin: 15px auto;
+    width: 378px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.type-toggle {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.type-toggle label {
+    margin-right: 10px;
+}
+
+/* Second Type Selector Styling */
+#second-type-selector {
+    margin-top: 10px;
+    width: 100%;
+    transition: opacity 0.3s, height 0.3s;
+}
+
+#second-type-selector.hidden {
+    display: none !important;
+}
+
+#second-type-list {
+    display: flex;
+    list-style-type: none;
+    justify-content: center;
+    margin-top: 5px;
+}
+
+.select-second-type {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    outline: 2px solid var(--offwhite);
+    border-radius: 6px;
+    background-color: var(--offwhite);
+    box-shadow: 0 0 15px var(--darkblue) inset;
+    transition: 0.3s;
+    margin: 0 3px;
+}
+
+.select-second-type.highlight {
+    outline: 2px solid white;
+    box-shadow: none;
+    background-color: transparent;
+}
+
+.select-second-type:hover {
+    outline: 2px solid var(--yellow);
+    box-shadow: none;
+    background-color: white;
+}
+
+.select-second-type > img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Card Layer Styling */
+.card {
+    position: relative !important; /* Ensure this is set for absolute positioning inside */
+}
+
+#second-card-layer {
+    pointer-events: none; /* Allow clicks to pass through to the card beneath */
+    transition: background-image 0.3s ease;
+    z-index: 1 !important; /* Ensure this is below card content */
+}
+
+/* Card content positioning fixes */
+.card-container {
+    display: block !important;
+    position: relative !important;
+    z-index: 5 !important; /* Ensure content is above background layers */
+}
+
+.card-top, 
+.card-bottom {
+    position: relative !important;
+    z-index: 6 !important;
+}
+
+/* Name and HP Fixes */
+.card-name {
+    position: relative !important;
+    font-size: min(33.6px, 2.1vw) !important;
+    transform: scaleX(0.9) translateX(-7%) !important;
+    z-index: 7 !important;
+}
+
+.hp-container {
+    position: relative !important;
+    top: 0.1vw !important;
+    z-index: 7 !important;
+}
+
+.card-hp {
+    position: relative !important;
+    font-size: min(4.8px, 0.3vw) !important;
+    font-family: 'Lato', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+    display: inline-block !important;
+    left: 0.35vw !important;
+}
+
+.hp {
+    font-size: min(28.8px, 1.8vw) !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    transform: scaleX(0.9) translateX(5%) !important;
+    font-weight: bold !important;
+    display: inline-block !important;
+}
+
+/* Ensure attacks and footer are above background */
+.attack, .card-footer {
+    position: relative !important;
+    z-index: 7 !important;
+}
+
+/* Custom drag areas */
+.custom-areas-container {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.custom-drop-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    width: 100%;
+}
+
+.custom-drop-area {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.2);
+    color: white;
+    border: 3px dotted white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-drop-area:hover {
+    border-color: var(--yellow);
+    background: rgba(0,50,120,0.3);
+}
+
+/* Download button styling */
+.download-btn {
+    margin-top: 15px;
+    padding: 8px 15px;
+    background-color: var(--darkblue);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s;
+}
+
+.download-btn:hover {
+    background-color: #0b5ca0;
+}
+
+/* Modal styling */
+.card-preview-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 90%;
+    max-height: 90%;
+    overflow: auto;
+}
+
+.preview-container {
+    width: 100%;
+    margin-bottom: 20px;
+    position: relative;
+}
