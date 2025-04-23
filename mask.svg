@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="747" height="1038" viewBox="0 0 747 1038" xmlns="http://www.w3.org/2000/svg">
-  <!-- Simple diagonal mask -->
-  <!-- White (top-left) = shows second type -->
-  <!-- Black (bottom-right) = shows first type -->
-  <polygon points="0,0 747,0 0,1038" fill="white"/>
-  <polygon points="747,0 747,1038 0,1038" fill="black"/>
-</svg>
