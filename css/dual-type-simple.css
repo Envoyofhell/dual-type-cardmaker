@@ -164,14 +164,14 @@
 .download-btn {
     margin-top: 15px;
     padding: 8px 15px;
-    background-color: var(--darkblue);
-    color: white;
+    background-color: var(--darkred);
+    color: rgb(255, 0, 0);
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    transition: background-color 0.3s;
+    transition: background-color 0.6s;
 }
 
 .download-btn:hover {

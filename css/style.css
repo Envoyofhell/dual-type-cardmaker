@@ -1,13 +1,15 @@
 * {
     margin: 0;
     padding: 0;
-    --darkblue: #79caf9;
-    --lightblue: #bbe4fd;
+    --darkred: #79caf9;
+    --lightred: #bbe4fd;
     --yellow: #fdcb00;
     --green: #7cad71;
     --lightgreen: #b4e667;
     --white: #effbf9;
-    --offwhite: #e5e7f6;
+    --offwhite: #4e526e;
+    --darkred:#7e1907;
+    --lightred: #df3a08;
 }
 
 body {
@@ -16,16 +18,17 @@ body {
     color: black; /* */
 }
 
-#background {
-    background-image: url('img/background.png'); /* */
-    background-position: center; /* */
-    background-size: contain cover; /* */
-    position: absolute; /* */
+/* Add this to your global.css or a dedicated background CSS file */
+#threejs-bg {
+    position: fixed; /* Position it relative to the viewport */
     top: 0;
     left: 0;
-    height: 100%;
     width: 100%;
-    opacity: 0.9; /* */
+    height: 100%;
+    z-index: -1; /* Place it behind other content */
+    overflow: hidden; /* Hide any overflow */
+    /* You might also want a fallback background color */
+    background-color: #0a0514;
 }
 
 .container {
@@ -100,7 +103,7 @@ body {
 .custom-drop-area.active { /* Added .active for custom areas */
     outline: 5px dotted var(--yellow); /* Changed from 8px for consistency */
     color: var(--yellow); /* */
-    box-shadow: 0 0 50px var(--darkblue) inset; /* */
+    box-shadow: 0 0 50px var(--darkred) inset; /* */
     text-shadow: 1px 0 1px #ad900f, 0 1px 1px #ad900f; /* */
 }
 
@@ -425,21 +428,21 @@ p.attack-damage {
 }
 
 .input-container::-webkit-scrollbar {
-    background: rgba(255, 255, 255, 0.527); /* */
+    background: rgba(143, 11, 11, 0.527); /* */
     width: 4px;
     opacity: 0.5; /* */
 }
 
 .input-container::-webkit-scrollbar-thumb {
-    background: #177edf69; /* */
+    background: #75230269; /* */
     opacity: 0.5; /* */
 }
 
 .input-container {
     position: relative; /* */
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; /* */
-    background-image: linear-gradient(to right, #1882c098, #51baf77a, #79caf98c); /* */
-    border-left: 4px solid rgba(167, 201, 233, 0.527); /* */
+    background-image: linear-gradient(to right, darkred, #0701017a, #ff00005d); /* */
+    border-left: 4px solid rgba(255, 94, 0, 0.527); /* */
     font-size: 16pt;
     height: 100%;
     width: 70%; /* */
@@ -455,8 +458,8 @@ p.attack-damage {
 .input-container p,
 .input-container h2,
 .input-container h3 { /* Added h3 */
-    color: white; /* */
-    text-shadow: 1px 0 1px #1365b3, 0 1px 1px #1365b3; /* */
+    color: rgb(250, 238, 238); /* */
+    text-shadow: 1px 0 1px #143b08, 0 1px 1px #1365b3; /* */
 }
 
 .input-container h2 {
@@ -492,8 +495,8 @@ p.attack-damage {
 .arrowbox {
     display: flex; /* */
     justify-content: center; /* */
-    background: linear-gradient(to bottom, var(--darkblue),var(--lightblue)); /* */
-    border-top: 3px solid var(--darkblue); /* */
+    background: linear-gradient(to bottom, var(--darkred),var(--lightred)); /* */
+    border-top: 3px solid var(--darkred); /* */
     border-bottom: 3px solid var(--offwhite);
     outline: 1px solid var(--white); /* */
     border-radius: 10px 10px 10px 10px; /* */
@@ -554,7 +557,7 @@ textarea,
 option,
 select {
     background-color: white; /* */
-    box-shadow: 0 0 15px var(--darkblue) inset; /* */
+    box-shadow: 0 0 15px var(--darkred) inset; /* */
     border: 1px solid white; /* */
     border-radius: 4px; /* */
 }
@@ -570,7 +573,7 @@ button:focus,
 .dropdown-container:focus-within .current-type { /* Target dropdown parent when active */
     outline: none; /* Remove default outline */
     border-color: var(--yellow); /* Optional: Keep border consistent */
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.7), 0 0 15px var(--darkblue) inset; /* White glow + existing inset */
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.7), 0 0 15px var(--darkred) inset; /* White glow + existing inset */
     /* filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7)); */ /* Alternative using filter */
 }
 
@@ -648,7 +651,7 @@ p.focused {
     outline: 2px solid var(--offwhite); /* */
     border-radius: 6px;
     background-color: var(--offwhite); /* */
-    box-shadow: 0 0 15px var(--darkblue) inset; /* */
+    box-shadow: 0 0 15px var(--darkred) inset; /* */
     transition: 0.3s; /* */
     margin: 0 3px 0 3px; /* */
 }
@@ -678,7 +681,7 @@ p.focused {
     border: 1px solid var(--offwhite); /* */
     border-radius: 6px; /* */
     background-color: white; /* */
-    box-shadow: 0 0 15px var(--darkblue) inset; /* */
+    box-shadow: 0 0 15px var(--darkred) inset; /* */
     outline: 1px solid white; /* */
     margin: 5px 0 5px 0; /* */
 }
@@ -746,7 +749,7 @@ p.focused {
     padding-right: 20px;
     align-items: center;
     height: 50px; /* */
-    background: linear-gradient(to bottom, var(--lightblue), var(--darkblue), var(--lightblue)); /* */
+    background: linear-gradient(to bottom, var(--lightred), var(--darkred), var(--lightred)); /* */
     outline: 1px solid var(--white); /* */
     margin: 5px; /* */
 }
@@ -765,7 +768,7 @@ p.focused {
     border-top: 3px solid var(--offwhite); /* */
     border-bottom: 1px solid var(--offwhite);
     border-radius: 10px 10px 2px 2px; /* */
-    background: linear-gradient(to bottom, var(--lightblue),  var(--darkblue), transparent); /* */
+    background: linear-gradient(to bottom, var(--lightred),  var(--darkred), transparent); /* */
 }
 
 .border-bottom {
@@ -968,8 +971,8 @@ p.focused {
     align-items: center;
     height: 70px;
     width: 70px; /* */
-    background: linear-gradient(to bottom, var(--darkblue),var(--lightblue)); /* */
-    border-top: 10px solid var(--darkblue); /* */
+    background: linear-gradient(to bottom, var(--darkred),var(--lightred)); /* */
+    border-top: 10px solid var(--darkred); /* */
     border-bottom: 7px solid var(--offwhite); /* */
     border-left: 1px solid var(--offwhite); /* */
     border-right: 1px solid var(--offwhite); /* */
@@ -1000,33 +1003,33 @@ p.focused {
 
 /* * * TYPES * * */
 /* (Type background rules remain the same) */
-.card-dark-basic { background-image: url('img/Basic/SS_Basic_Dark.png'); }
-.card-dark-stage-1 { background-image: url('img/Stage 1/SS_Stage1_Dark.png'); }
-.card-dark-stage-2 { background-image: url('img/Stage 2/SS_Stage2_Dark.png'); }
-.card-electric-basic { background-image: url('img/Basic/SS_Basic_Lightning.png'); }
-.card-electric-stage-1 { background-image: url('img/Stage 1/SS_Stage1_Lightning.png'); }
-.card-electric-stage-2 { background-image: url('img/Stage 2/SS_Stage2_Lightning.png'); }
-.card-fighting-basic { background-image: url('img/Basic/SS_Basic_Fighting.png'); }
-.card-fighting-stage-1 { background-image: url('img/Stage 1/SS_Stage1_Fighting.png'); }
-.card-fighting-stage-2 { background-image: url('img/Stage 2/SS_Stage2_Fighting.png'); }
-.card-fire-basic { background-image: url('img/Basic/SS_Basic_Fire.png'); } /* */
-.card-fire-stage-1 { background-image: url('img/Stage 1/SS_Stage1_Fire.png'); }
-.card-fire-stage-2 { background-image: url('img/Stage 2/SS_Stage2_Fire.png'); }
-.card-grass-basic { background-image: url('img/Basic/SS_Basic_Grass.png'); }
-.card-grass-stage-1 { background-image: url('img/Stage 1/SS_Stage1_Grass.png'); }
-.card-grass-stage-2 { background-image: url('img/Stage 2/SS_Stage2_Grass.png'); }
-.card-metal-basic { background-image: url('img/Basic/SS_Basic_Metal.png'); }
-.card-metal-stage-1 { background-image: url('img/Stage 1/SS_Stage1_Metal.png'); }
-.card-metal-stage-2 { background-image: url('img/Stage 2/SS_Stage2_Metal.png'); }
-.card-normal-basic { background-image: url('img/Basic/SS_Basic_Colorless.png'); }
-.card-normal-stage-1 { background-image: url('img/Stage 1/SS_Stage1_Colorless.png'); }
-.card-normal-stage-2 { background-image: url('img/Stage 2/SS_Stage2_Colorless.png'); }
-.card-psychic-basic { background-image: url('img/Basic/SS_Basic_Psychic.png'); }
-.card-psychic-stage-1 { background-image: url('img/Stage 1/SS_Stage1_Psychic.png'); }
-.card-psychic-stage-2 { background-image: url('img/Stage 2/SS_Stage2_Psychic.png'); }
-.card-water-basic { background-image: url('img/Basic/SS_Basic_Water.png'); /* */ }
-.card-water-stage-1 { background-image: url('img/Stage 1/SS_Stage1_Water.png'); }
-.card-water-stage-2 { background-image: url('img/Stage 2/SS_Stage2_Water.png'); }
+.card-dark-basic { background-image: url('../img/Basic/SS_Basic_Dark.png'); }
+.card-dark-stage-1 { background-image: url('../img/Stage 1/SS_Stage1_Dark.png'); }
+.card-dark-stage-2 { background-image: url('../img/Stage 2/SS_Stage2_Dark.png'); }
+.card-electric-basic { background-image: url('../img/Basic/SS_Basic_Lightning.png'); }
+.card-electric-stage-1 { background-image: url('../img/Stage 1/SS_Stage1_Lightning.png'); }
+.card-electric-stage-2 { background-image: url('../img/Stage 2/SS_Stage2_Lightning.png'); }
+.card-fighting-basic { background-image: url('../img/Basic/SS_Basic_Fighting.png'); }
+.card-fighting-stage-1 { background-image: url('../img/Stage 1/SS_Stage1_Fighting.png'); }
+.card-fighting-stage-2 { background-image: url('../img/Stage 2/SS_Stage2_Fighting.png'); }
+.card-fire-basic { background-image: url('../img/Basic/SS_Basic_Fire.png'); } /* */
+.card-fire-stage-1 { background-image: url('../img/Stage 1/SS_Stage1_Fire.png'); }
+.card-fire-stage-2 { background-image: url('../img/Stage 2/SS_Stage2_Fire.png'); }
+.card-grass-basic { background-image: url('../img/Basic/SS_Basic_Grass.png'); }
+.card-grass-stage-1 { background-image: url('../img/Stage 1/SS_Stage1_Grass.png'); }
+.card-grass-stage-2 { background-image: url('../img/Stage 2/SS_Stage2_Grass.png'); }
+.card-metal-basic { background-image: url('../img/Basic/SS_Basic_Metal.png'); }
+.card-metal-stage-1 { background-image: url('../img/Stage 1/SS_Stage1_Metal.png'); }
+.card-metal-stage-2 { background-image: url('../img/Stage 2/SS_Stage2_Metal.png'); }
+.card-normal-basic { background-image: url('../img/Basic/SS_Basic_Colorless.png'); }
+.card-normal-stage-1 { background-image: url('../img/Stage 1/SS_Stage1_Colorless.png'); }
+.card-normal-stage-2 { background-image: url('../mg/Stage 2/SS_Stage2_Colorless.png'); }
+.card-psychic-basic { background-image: url('../img/Basic/SS_Basic_Psychic.png'); }
+.card-psychic-stage-1 { background-image: url('../img/Stage 1/SS_Stage1_Psychic.png'); }
+.card-psychic-stage-2 { background-image: url('../img/Stage 2/SS_Stage2_Psychic.png'); }
+.card-water-basic { background-image: url('../img/Basic/SS_Basic_Water.png'); /* */ }
+.card-water-stage-1 { background-image: url('../img/Stage 1/SS_Stage1_Water.png'); }
+.card-water-stage-2 { background-image: url('../img/Stage 2/SS_Stage2_Water.png'); }
 
 /* Holographic Effect Style (Ensure Infinite Loop) */
 @keyframes holographic {
