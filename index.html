@@ -4,1794 +4,521 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Stylesheets -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="dual-type-simple.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@900&family=Plus+Jakarta+Sans:wght@800&display=swap" rel="stylesheet">
     
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    
-    <!-- HTML2Canvas for card download -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    
-    <!-- Core scripts -->
     <script src="index.js" defer></script>
     <script src="dual-type-simple.js" defer></script>
+    <script src=
+    "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
     <script src="card-download.js" defer></script>
     <script src="custom-drag-drop.js" defer></script>
-    
-    <!-- Local storage helper -->
-    <script src="storage-helper.js" defer></script>
-    
     <title>Pokémon Card Maker</title>
-    
-    <!-- Critical CSS fixes -->
-    <style>
-        /* Fix content positioning and layering */
-        .card {
-            position: relative !important;
-        }
-        
-        .card-container {
-            display: block !important;
-            position: relative !important;
-            z-index: 5 !important; /* Ensure content is above background layers */
-        }
-        
-        .card-top, 
-        .card-bottom {
-            position: relative !important;
-            z-index: 6 !important;
-        }
-        
-        /* Fix name and HP */
-        .card-name {
-            position: relative !important;
-            font-size: min(33.6px, 2.1vw) !important;
-            transform: scaleX(0.9) translateX(-7%) !important;
-            z-index: 7 !important;
-        }
-        
-        .hp-container {
-            position: relative !important;
-            top: 0.1vw !important;
-            z-index: 7 !important;
-        }
-        
-        .card-hp {
-            position: relative !important;
-            font-size: min(4.8px, 0.3vw) !important;
-            font-family: 'Lato', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
-            display: inline-block !important;
-            left: 0.35vw !important;
-        }
-        
-        .hp {
-            font-size: min(28.8px, 1.8vw) !important;
-            font-family: 'Plus Jakarta Sans', sans-serif !important;
-            transform: scaleX(0.9) translateX(5%) !important;
-            font-weight: bold !important;
-            display: inline-block !important;
-        }
-        
-        /* Ensure attacks and footer are above background */
-        .attack, .card-footer {
-            position: relative !important;
-            z-index: 7 !important;
-        }
-        
-        /* Ensure card layers render in the correct order */
-        #second-card-layer {
-            z-index: 1 !important; /* Above base card but below content */
-        }
-        
-        #custom-bg-layer {
-            z-index: 0 !important; /* Bottom layer */
-        }
-        
-        /* Fix any specific text elements */
-        .attack-name, .attack-damage, .attack-text {
-            position: relative !important;
-            z-index: 8 !important;
-        }
-        
-        .card-footer p, 
-        .card-footer div {
-            position: relative !important;
-            z-index: 8 !important;
-        }
-        
-        /* Responsive improvements */
-        @media (max-width: 1200px) {
-            .container {
-                grid-template-columns: 1fr;
-                height: auto;
-            }
-            
-            .input-container {
-                width: 100%;
-                max-width: 600px;
-                margin: 0 auto;
-            }
-            
-            .img-container {
-                margin: 20px auto;
-            }
-            
-            .img-drop-container {
-                margin: 20px auto;
-                position: static;
-                top: 0;
-            }
-        }
-        
-        /* Enhanced UI elements */
-        .tabbed-interface {
-            width: 100%;
-            margin-top: 20px;
-        }
-        
-        .tab-buttons {
-            display: flex;
-            border-bottom: 2px solid var(--darkblue);
-        }
-        
-        .tab-button {
-            padding: 10px 15px;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            border-radius: 5px 5px 0 0;
-            margin-right: 5px;
-            cursor: pointer;
-            color: white;
-            transition: 0.3s;
-        }
-        
-        .tab-button.active {
-            background: var(--darkblue);
-        }
-        
-        .tab-content {
-            display: none;
-            padding: 15px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 0 0 5px 5px;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        /* Card templates */
-        .template-selection {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .card-template {
-            text-align: center;
-            cursor: pointer;
-            transition: 0.3s;
-            padding: 10px;
-            border-radius: 5px;
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .card-template:hover {
-            background: rgba(255,255,255,0.2);
-        }
-        
-        .card-template img {
-            width: 100%;
-            border-radius: 5px;
-        }
-        
-        /* Action buttons */
-        .action-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .action-button {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: var(--darkblue);
-            color: white;
-            transition: 0.3s;
-        }
-        
-        .action-button:hover {
-            background-color: #0b5ca0;
-        }
-        
-        /* Holographic effect toggle */
-        .holo-toggle {
-            display: flex;
-            align-items: center;
-            margin: 15px 0;
-        }
-        
-        .holo-toggle label {
-            margin-right: 10px;
-            color: white;
-        }
-        
-        /* Card gallery */
-        .card-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .gallery-item {
-            position: relative;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-            transition: 0.3s;
-        }
-        
-        .gallery-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        
-        .gallery-item img {
-            width: 100%;
-            display: block;
-        }
-        
-        .gallery-item-actions {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            justify-content: space-around;
-            padding: 5px;
-            opacity: 0;
-            transition: 0.3s;
-        }
-        
-        .gallery-item:hover .gallery-item-actions {
-            opacity: 1;
-        }
-        
-        .gallery-action {
-            color: white;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-    </style>
 </head>
 <body>
     <div id="background"></div>
     <div class="container">
-        <!-------------- INPUT CONTAINER --------------->
-        <div class="input-container">
-            <img id="logo" src="img/logo.png" alt="Pokemon Card Maker Logo">
-            
-            <!-------------- TABBED INTERFACE --------------->
-            <div class="tabbed-interface">
-                <div class="tab-buttons">
-                    <button class="tab-button active" data-tab="pokemon-info">Pokémon Info</button>
-                    <button class="tab-button" data-tab="card-types">Card Types</button>
-                    <button class="tab-button" data-tab="abilities">Abilities</button>
-                    <button class="tab-button" data-tab="attacks">Attacks</button>
-                    <button class="tab-button" data-tab="gallery">Gallery</button>
-                    <button class="tab-button" data-tab="templates">Templates</button>
+<!-------------- NAME / TYPE FORM --------------->
+            <div class="input-container">
+                <img id="logo" src="img/logo.png" alt="">
+                <div id="type-selector">
+                    <ul id="type-list">
+                        <li value="grass" class="select-type"><img src="img/grass.png" alt="grass"></li>
+                        <li value="water" class="select-type"><img src="img/water.png" alt="water"></li>
+                        <li value="fire" class="select-type"><img src="img/fire.png" alt="fire"></li>
+                        <li value="normal" class="select-type"><img src="img/normal.png" alt="normal"></li>
+                        <li value="electric" class="select-type"><img src="img/electric.png" alt="electric"></li>
+                        <li value="psychic" class="select-type"><img src="img/psychic.png" alt="psychic"></li>
+                        <li value="fighting" class="select-type"><img src="img/fighting.png" alt="fighting"></li>
+                        <li value="dark" class="select-type"><img src="img/dark.png" alt="dark"></li>
+                        <li value="metal" class="select-type"><img src="img/metal.png" alt="metal"></li>
+                    </ul>
                 </div>
-                
-                <!-------------- INFO TAB --------------->
-                <div class="tab-content active" id="pokemon-info-tab">
-                    <div id="name-container">
-                        <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" maxlength="20">
-                        <label for="hp">HP:</label>
-                        <input type="number" id="hp" name="hp" min="10" max="340" step="10">
+                <!-- Dual type container -->
+                <div id="dual-type-container">
+                    <div class="type-toggle">
+                        <label for="dual-type-toggle">Dual Type:</label>
+                        <input type="checkbox" id="dual-type-toggle" name="dual-type-toggle">
                     </div>
-                    
-                    <!-------------- STAGE FORMS --------------->
-                    <div class="stage-input">
-                        <div id="stage-dropdown" class="input-header closed">
-                            <h2>Stage:</h2>
-                            <div class="arrowbox">
-                                <i id="stage-arrow" class="arrow down"></i>
-                            </div>
-                        </div>
-                        <div id="stage-body" class="input-body">
-                            <div>
-                                <label for="stage">Stage:</label>
-                                <select id="stage" name="stage">
-                                    <option value="basic">Basic</option>
-                                    <option value="stage-1">Stage 1</option>
-                                    <option value="stage-2">Stage 2</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="evolves-from">Evolves from:</label>
-                                <input type="text" id="evolves-from" name="evolves-from" maxlength="20">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-------------- STATS FORMS --------------->
-                    <div class="stats-input">
-                        <div id="stats-dropdown" class="input-header closed">
-                            <h2>Stats:</h2>
-                            <div class="arrowbox">
-                                <i id="stats-arrow" class="arrow down"></i>
-                            </div>
-                        </div>
-                        <div id="stats-body" class="input-body">
-                            <div>
-                                <label for="category">Category:</label>
-                                <input type="text" id="category" name="category">
-                            </div>
-                            <div>
-                                <label for="pokedex-number">Pokedex:</label>
-                                <input type="number" id="pokedex-number" name="pokedex-number">
-                            </div>                      
-                            <div class="input-bottom">                      
-                                <div class="height-div">
-                                    <p class="ht">HT:</p>
-                                    <input type="number" id="feet" name="feet"><br>
-                                    <label for="feet">'</label>
-                                    <input type="number" id="inches" name="inches"><br>
-                                    <label for="inches">"</label>
-                                </div>
-                                <div class="weight-div">
-                                    <label for="weight">WT:</label>
-                                    <input type="number" id="weight" name="weight">
-                                    <p>lbs</p>
-                                </div>           
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-------------- HOLOGRAPHIC EFFECT --------------->
-                    <div class="holo-toggle">
-                        <label for="holo-effect">Holographic Effect:</label>
-                        <input type="checkbox" id="holo-effect" name="holo-effect">
-                    </div>
-                    
-                    <!-------------- ACTION BUTTONS --------------->
-                    <div class="action-buttons">
-                        <button id="save-progress" class="action-button">Save Progress</button>
-                        <button id="load-progress" class="action-button">Load Last Save</button>
-                        <button id="export-data" class="action-button">Export Data</button>
-                        <button id="import-data" class="action-button">Import Data</button>
-                        <button id="reset-card" class="action-button">Reset Card</button>
-                    </div>
-                </div>
-                
-                <!-------------- CARD TYPES TAB --------------->
-                <div class="tab-content" id="card-types-tab">
-                    <h3>Primary Type</h3>
-                    <div id="type-selector">
-                        <ul id="type-list">
-                            <li value="grass" class="select-type"><img src="img/grass.png" alt="grass"></li>
-                            <li value="water" class="select-type"><img src="img/water.png" alt="water"></li>
-                            <li value="fire" class="select-type"><img src="img/fire.png" alt="fire"></li>
-                            <li value="normal" class="select-type"><img src="img/normal.png" alt="normal"></li>
-                            <li value="electric" class="select-type"><img src="img/electric.png" alt="electric"></li>
-                            <li value="psychic" class="select-type"><img src="img/psychic.png" alt="psychic"></li>
-                            <li value="fighting" class="select-type"><img src="img/fighting.png" alt="fighting"></li>
-                            <li value="dark" class="select-type"><img src="img/dark.png" alt="dark"></li>
-                            <li value="metal" class="select-type"><img src="img/metal.png" alt="metal"></li>
+                    <div id="second-type-selector" class="hidden">
+                        <p>Second Type:</p>
+                        <ul id="second-type-list">
+                            <li value="grass" class="select-second-type"><img src="img/grass.png" alt="grass"></li>
+                            <li value="water" class="select-second-type"><img src="img/water.png" alt="water"></li>
+                            <li value="fire" class="select-second-type"><img src="img/fire.png" alt="fire"></li>
+                            <li value="normal" class="select-second-type"><img src="img/normal.png" alt="normal"></li>
+                            <li value="electric" class="select-second-type"><img src="img/electric.png" alt="electric"></li>
+                            <li value="psychic" class="select-second-type"><img src="img/psychic.png" alt="psychic"></li>
+                            <li value="fighting" class="select-second-type"><img src="img/fighting.png" alt="fighting"></li>
+                            <li value="dark" class="select-second-type"><img src="img/dark.png" alt="dark"></li>
+                            <li value="metal" class="select-second-type"><img src="img/metal.png" alt="metal"></li>
                         </ul>
                     </div>
-                    
-                    <!-- Dual type container -->
-                    <div id="dual-type-container">
-                        <div class="type-toggle">
-                            <label for="dual-type-toggle">Dual Type:</label>
-                            <input type="checkbox" id="dual-type-toggle" name="dual-type-toggle">
-                        </div>
-                        <div id="second-type-selector" class="hidden">
-                            <p>Second Type:</p>
-                            <ul id="second-type-list">
-                                <li value="grass" class="select-second-type"><img src="img/grass.png" alt="grass"></li>
-                                <li value="water" class="select-second-type"><img src="img/water.png" alt="water"></li>
-                                <li value="fire" class="select-second-type"><img src="img/fire.png" alt="fire"></li>
-                                <li value="normal" class="select-second-type"><img src="img/normal.png" alt="normal"></li>
-                                <li value="electric" class="select-second-type"><img src="img/electric.png" alt="electric"></li>
-                                <li value="psychic" class="select-second-type"><img src="img/psychic.png" alt="psychic"></li>
-                                <li value="fighting" class="select-second-type"><img src="img/fighting.png" alt="fighting"></li>
-                                <li value="dark" class="select-second-type"><img src="img/dark.png" alt="dark"></li>
-                                <li value="metal" class="select-second-type"><img src="img/metal.png" alt="metal"></li>
-                            </ul>
+                </div>
+
+<!-------------- STAGE FORMS --------------->
+                <div class="stage-input">
+                    <div id="stage-dropdown" class="input-header closed">
+                        <h2>Stage:</h2>
+                        <div class="arrowbox">
+                            <i id="stage-arrow" class="arrow down"></i>
                         </div>
                     </div>
-                    
-                    <!-------------- FOOTER FORMS --------------->
-                    <div class="footer-input">
-                        <div class="footer-flex">
-                            <div class="weakness-selector type-selector">
-                                <p class="weakness-label">Weakness:</p>
-                                <div id="weakness-dropdown" class="dropdown-container weakness-dropdown">
+                    <div id="stage-body" class="input-body">
+                        <div>
+                            <label for="stage">Stage:</label>
+                            <select id="stage" name="stage">
+                                <option value="basic">Basic</option>
+                                <option value="stage-1">Stage 1</option>
+                                <option value="stage-2">Stage 2</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="evolves-from">Evolves from:</label>
+                            <input type="text" id="evolves-from" name="evolves-from" maxlength="20">
+                        </div>
+                    </div>
+                </div>
+<!-------------- STATS FORMS --------------->
+                <div class="stats-input">
+                    <div id="stats-dropdown" class="input-header closed">
+                        <h2>Stats:</h2>
+                        <div class="arrowbox">
+                            <i id="stats-arrow" class="arrow down"></i>
+                        </div>
+                    </div>
+                    <div id="stats-body" class="input-body">
+                        <div>
+                            <label for="category">Category:</label>
+                            <input type="text" id="category" name="category">
+                        </div>
+                        <div>
+                            <label for="pokedex-number">Pokedex:</label>
+                            <input type="number" id="pokedex-number" name="pokedex-number">
+                        </div>                      
+                        <div class="input-bottom">                      
+                            <div class="height-div">
+                                <p class="ht">HT:</p>
+                                <input type="number" id="feet" name="feet"><br>
+                                <label for="feet">'</label>
+                                <input type="number" id="inches" name="inches"><br>
+                                <label for="inches">"</label>
+                            </div>
+                            <div class="weight-div">
+                                <label for="weight">WT:</label>
+                                <input type="number" id="weight" name="weight">
+                                <p>lbs</p>
+                            </div>           
+                        </div>
+                    </div>
+                </div>
+<!-------------- ABILITY FORMS --------------->
+                <div class="ability-input">
+                    <div id="ability-dropdown" class="input-header closed">
+                        <h2>Ability:</h2>
+                        <div class="arrowbox">
+                            <i id="ability-arrow" class="arrow down"></i>
+                        </div>
+                    </div>
+                    <div id="ability-body" class="input-body">
+                        <div>
+                            <label for="ability-name">Name:</label>
+                            <input type="text" id="ability-name" name="ability-name"><br>
+                        </div>
+                        <div>
+                            <label for="ability-text">Ability Text:</label><br>
+                            <textarea id="ability-text" name="ability-text" rows="4" cols="40"></textarea><br>
+                        </div>
+                    </div>
+                </div>
+<!-------------- ATTACK 1 FORM --------------->
+                <div class="attack-input">
+                    <div id="attack-1-dropdown" class="input-header closed">
+                        <h2>Attack 1:</h2>
+                        <div class="arrowbox">
+                            <i id="attack-1-arrow" class="arrow down"></i>
+                        </div>
+                    </div>
+                    <div id="attack1" class="attack-body input-body">
+                        <div>
+                            <label for="attack1-name">Name:</label>
+                            <input type="text" id="attack1-name" name="attack1-name" maxlength="20">
+                            <div class="damage-container">
+                                <label for="attack-damage-1">Damage:</label>
+                                <input type="number" id="attack-damage-1" name="attack-damage-1"  min="10" max="500" step="10">
+                            </div>
+                        </div>
+                        <div class="attack-cost-container">
+                            <div class="attacks-selector type-selector">
+                                <p class="attack-1-label">Cost:</p>
+                                <div id="attack-1-cost-1" class="dropdown-container attack-dropdown">
                                     <div class="current-type">
-                                        <div id="current-weakness">
-                                        </div>
-                                        <ul id="weakness-list" class="dropdown">
-                                            <li value="" class="weakness-type"></li>
-                                            <li value="grass" class="weakness-type"><img src="img/grass.png" alt="grass"></li>
-                                            <li value="water" class="weakness-type"><img src="img/water.png" alt="water"></li>
-                                            <li value="fire" class="weakness-type"><img src="img/fire.png" alt="fire"></li>
-                                            <li value="normal" class="weakness-type"><img src="img/normal.png" alt="normal"></li>
-                                            <li value="electric" class="weakness-type"><img src="img/electric.png" alt="electric"></li>
-                                            <li value="psychic" class="weakness-type"><img src="img/psychic.png" alt="psychic"></li>
-                                            <li value="fighting" class="weakness-type"><img src="img/fighting.png" alt="fighting"></li>
-                                            <li value="dark" class="weakness-type"><img src="img/dark.png" alt="dark"></li>
-                                            <li value="metal" class="weakness-type"><img src="img/metal.png" alt="metal"></li>
+                                        <div id="current-cost-1-1"></div>
+                                        <ul id="attack-cost-list-1-1" class="dropdown">
+                                            <li value="" class="cost-1-1"></li>
+                                            <li value="grass" class="cost-1-1"><img src="img/grass.png" alt="grass"></li>
+                                            <li value="water" class="cost-1-1"><img src="img/water.png" alt="water"></li>
+                                            <li value="fire" class="cost-1-1"><img src="img/fire.png" alt="fire"></li>
+                                            <li value="normal" class="cost-1-1"><img src="img/normal.png" alt="normal"></li>
+                                            <li value="electric" class="cost-1-1"><img src="img/electric.png" alt="electric"></li>
+                                            <li value="psychic" class="cost-1-1"><img src="img/psychic.png" alt="psychic"></li>
+                                            <li value="fighting" class="cost-1-1"><img src="img/fighting.png" alt="fighting"></li>
+                                            <li value="dark" class="cost-1-1"><img src="img/dark.png" alt="dark"></li>
+                                            <li value="metal" class="cost-1-1"><img src="img/metal.png" alt="metal"></li>
+                                            <li value="no-cost" class="cost-1-1"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
                                         </ul>
                                     </div>
-                                    <div class="arrowbox" id="weakness-button">
-                                        <i id="weakness-arrow" class="arrow down"></i>
-                                    </div>                                
+                                    <div class="arrowbox" id="attack-1-cost-1-button">
+                                        <i id="attack-1-1-arrow" class="arrow down"></i>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="resistance-selector type-selector">
-                                <p class="resistance-label">Resistance:</p>
-                                <div id="resistance-dropdown" class="dropdown-container resistance-dropdown">
-                                    <div id="resistance_onclick" class="current-type">
-                                        <div id="current-resistance">
+                            <div class="attacks-selector type-selector">
+                                <div id="attack-1-cost-2" class="dropdown-container attack-dropdown">
+                                    <div class="current-type">
+                                        <div id="current-cost-1-2">
                                         </div>
-                                        <ul id="resistance-list" class="dropdown">
-                                            <li value="" class="resistance-type"></li>
-                                            <li value="grass" class="resistance-type"><img src="img/grass.png" alt="grass"></li>
-                                            <li value="water" class="resistance-type"><img src="img/water.png" alt="water"></li>
-                                            <li value="fire" class="resistance-type"><img src="img/fire.png" alt="fire"></li>
-                                            <li value="normal" class="resistance-type"><img src="img/normal.png" alt="normal"></li>
-                                            <li value="electric" class="resistance-type"><img src="img/electric.png" alt="electric"></li>
-                                            <li value="psychic" class="resistance-type"><img src="img/psychic.png" alt="psychic"></li>
-                                            <li value="fighting" class="resistance-type"><img src="img/fighting.png" alt="fighting"></li>
-                                            <li value="dark" class="resistance-type"><img src="img/dark.png" alt="dark"></li>
-                                            <li value="metal" class="resistance-type"><img src="img/metal.png" alt="metal"></li>
+                                        <ul id="attack-cost-list-1-2" class="dropdown">
+                                            <li value="" class="cost-1-2"></li>
+                                            <li value="grass" class="cost-1-2"><img src="img/grass.png" alt="grass"></li>
+                                            <li value="water" class="cost-1-2"><img src="img/water.png" alt="water"></li>
+                                            <li value="fire" class="cost-1-2"><img src="img/fire.png" alt="fire"></li>
+                                            <li value="normal" class="cost-1-2"><img src="img/normal.png" alt="normal"></li>
+                                            <li value="electric" class="cost-1-2"><img src="img/electric.png" alt="electric"></li>
+                                            <li value="psychic" class="cost-1-2"><img src="img/psychic.png" alt="psychic"></li>
+                                            <li value="fighting" class="cost-1-2"><img src="img/fighting.png" alt="fighting"></li>
+                                            <li value="dark" class="cost-1-2"><img src="img/dark.png" alt="dark"></li>
+                                            <li value="metal" class="cost-1-2"><img src="img/metal.png" alt="metal"></li>
+                                            <li value="no-cost" class="cost-1-2"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
                                         </ul>
                                     </div>
-                                    <div class="arrowbox" id="resistance-button">
-                                        <i id="resistance-arrow" class="arrow down"></i>
-                                    </div>                            
+                                    <div class="arrowbox" id="attack-1-cost-2-button">
+                                        <i id="attack-1-2-arrow" class="arrow down"></i>
+                                    </div>
                                 </div>
                             </div>
-                            <div>
-                                <label for="retreat">Retreat:</label>
-                                <select id="retreat" name="retreat">
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                </select> 
-                           </div>    
+                            <div class="attacks-selector type-selector">
+                                <div id="attack-1-cost-3" class="dropdown-container attack-dropdown">
+                                    <div class="current-type">
+                                        <div id="current-cost-1-3">
+                                        </div>
+                                        <ul id="attack-cost-list-1-3" class="dropdown">
+                                            <li value="" class="cost-1-3"></li>
+                                            <li value="grass" class="cost-1-3"><img src="img/grass.png" alt="grass"></li>
+                                            <li value="water" class="cost-1-3"><img src="img/water.png" alt="water"></li>
+                                            <li value="fire" class="cost-1-3"><img src="img/fire.png" alt="fire"></li>
+                                            <li value="normal" class="cost-1-3"><img src="img/normal.png" alt="normal"></li>
+                                            <li value="electric" class="cost-1-3"><img src="img/electric.png" alt="electric"></li>
+                                            <li value="psychic" class="cost-1-3"><img src="img/psychic.png" alt="psychic"></li>
+                                            <li value="fighting" class="cost-1-3"><img src="img/fighting.png" alt="fighting"></li>
+                                            <li value="dark" class="cost-1-3"><img src="img/dark.png" alt="dark"></li>
+                                            <li value="metal" class="cost-1-3"><img src="img/metal.png" alt="metal"></li>
+                                            <li value="no-cost" class="cost-1-3"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
+                                        </ul>
+                                    </div>
+                                    <div class="arrowbox" id="attack-1-cost-3-button">
+                                        <i id="attack-1-3-arrow" class="arrow down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="attacks-selector type-selector">
+                                <div id="attack-1-cost-4" class="dropdown-container attack-dropdown">
+                                    <div class="current-type">
+                                        <div id="current-cost-1-4">
+                                        </div>
+                                        <ul id="attack-cost-list-1-4" class="dropdown">
+                                            <li value="" class="cost-1-4"></li>
+                                            <li value="grass" class="cost-1-4"><img src="img/grass.png" alt="grass"></li>
+                                            <li value="water" class="cost-1-4"><img src="img/water.png" alt="water"></li>
+                                            <li value="fire" class="cost-1-4"><img src="img/fire.png" alt="fire"></li>
+                                            <li value="normal" class="cost-1-4"><img src="img/normal.png" alt="normal"></li>
+                                            <li value="electric" class="cost-1-4"><img src="img/electric.png" alt="electric"></li>
+                                            <li value="psychic" class="cost-1-4"><img src="img/psychic.png" alt="psychic"></li>
+                                            <li value="fighting" class="cost-1-4"><img src="img/fighting.png" alt="fighting"></li>
+                                            <li value="dark" class="cost-1-4"><img src="img/dark.png" alt="dark"></li>
+                                            <li value="metal" class="cost-1-4"><img src="img/metal.png" alt="metal"></li>
+                                            <li value="no-cost" class="cost-1-4"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
+                                        </ul>
+                                    </div>
+                                    <div class="arrowbox" id="attack-1-cost-4-button">
+                                        <i id="attack-1-4-arrow" class="arrow down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="attack-text-1">Attack Text:</label><br>
+                            <textarea id="attack-text-1" name="attack-text-1" rows="4" cols="40"></textarea><br>
                         </div>
                     </div>
                 </div>
-                
-                <!-------------- ABILITIES TAB --------------->
-                <div class="tab-content" id="abilities-tab">
-                    <!-------------- ABILITY FORMS --------------->
-                    <div class="ability-input">
-                        <div id="ability-dropdown" class="input-header">
-                            <h2>Ability:</h2>
-                            <div class="arrowbox">
-                                <i id="ability-arrow" class="arrow down"></i>
+<!-------------- ATTACK 2 FORM --------------->
+                <div class="attack-input">
+                    <div id="attack-2-dropdown" class="input-header closed">
+                        <h2>Attack 2:</h2>
+                        <div class="arrowbox">
+                            <i id="attack-2-arrow" class="arrow down"></i>
+                        </div>
+                    </div>
+                    <div id="attack2" class="attack-body input-body">
+                        <div>
+                            <label for="attack2-name">Name:</label>
+                            <input type="text" id="attack2-name" name="attack2-name" maxlength="20">
+                            <div class="damage-container">
+                                <label for="attack-damage-2">Damage:</label>
+                                <input type="number" id="attack-damage-2" name="attack-damage-2" min="10" max="500"  step="10">
                             </div>
                         </div>
-                        <div id="ability-body" class="input-body">
-                            <div>
-                                <label for="ability-name">Name:</label>
-                                <input type="text" id="ability-name" name="ability-name"><br>
+                        <div class="attack-cost-container">
+                            <div class="attacks-selector type-selector">
+                                <p class="attack-2-label">Cost:</p>
+                                <div id="attack-2-cost-1" class="dropdown-container attack-dropdown">
+                                    <div class="current-type type-closed">
+                                        <div id="current-cost-2-1"></div>
+                                        <ul id="attack-cost-list-2-1" class="dropdown">
+                                            <li value="" class="cost-2-1"></li>
+                                            <li value="grass" class="cost-2-1"><img src="img/grass.png" alt="grass"></li>
+                                            <li value="water" class="cost-2-1"><img src="img/water.png" alt="water"></li>
+                                            <li value="fire" class="cost-2-1"><img src="img/fire.png" alt="fire"></li>
+                                            <li value="normal" class="cost-2-1"><img src="img/normal.png" alt="normal"></li>
+                                            <li value="electric" class="cost-2-1"><img src="img/electric.png" alt="electric"></li>
+                                            <li value="psychic" class="cost-2-1"><img src="img/psychic.png" alt="psychic"></li>
+                                            <li value="fighting" class="cost-2-1"><img src="img/fighting.png" alt="fighting"></li>
+                                            <li value="dark" class="cost-2-1"><img src="img/dark.png" alt="dark"></li>
+                                            <li value="metal" class="cost-2-1"><img src="img/metal.png" alt="metal"></li>
+                                            <li value="no-cost" class="cost-2-1"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
+                                        </ul>
+                                    </div>
+                                    <div class="arrowbox" id="attack-2-cost-1-button">
+                                        <i id="attack-2-1-arrow" class="arrow down"></i>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <label for="ability-text">Ability Text:</label><br>
-                                <textarea id="ability-text" name="ability-text" rows="4" cols="40"></textarea><br>
+                            <div class="attacks-selector type-selector">
+                                <div id="attack-2-cost-2" class="dropdown-container attack-dropdown">
+                                    <div class="current-type type-closed">
+                                        <div id="current-cost-2-2">
+                                        </div>
+                                        <ul id="attack-cost-list-2-2" class="dropdown">
+                                            <li value="" class="cost-2-2"></li>
+                                            <li value="grass" class="cost-2-2"><img src="img/grass.png" alt="grass"></li>
+                                            <li value="water" class="cost-2-2"><img src="img/water.png" alt="water"></li>
+                                            <li value="fire" class="cost-2-2"><img src="img/fire.png" alt="fire"></li>
+                                            <li value="normal" class="cost-2-2"><img src="img/normal.png" alt="normal"></li>
+                                            <li value="electric" class="cost-2-2"><img src="img/electric.png" alt="electric"></li>
+                                            <li value="psychic" class="cost-2-2"><img src="img/psychic.png" alt="psychic"></li>
+                                            <li value="fighting" class="cost-2-2"><img src="img/fighting.png" alt="fighting"></li>
+                                            <li value="dark" class="cost-2-2"><img src="img/dark.png" alt="dark"></li>
+                                            <li value="metal" class="cost-2-2"><img src="img/metal.png" alt="metal"></li>
+                                            <li value="no-cost" class="cost-2-2"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
+                                        </ul>
+                                    </div>
+                                    <div class="arrowbox" id="attack-2-cost-2-button">
+                                        <i id="attack-2-2-arrow" class="arrow down"></i>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="attacks-selector type-selector">
+                                <div id="attack-2-cost-3" class="dropdown-container attack-dropdown">
+                                    <div class="current-type type-closed">
+                                        <div id="current-cost-2-3">
+                                        </div>
+                                        <ul id="attack-cost-list-2-3" class="dropdown">
+                                            <li value="" class="cost-2-3"></li>
+                                            <li value="grass" class="cost-2-3"><img src="img/grass.png" alt="grass"></li>
+                                            <li value="water" class="cost-2-3"><img src="img/water.png" alt="water"></li>
+                                            <li value="fire" class="cost-2-3"><img src="img/fire.png" alt="fire"></li>
+                                            <li value="normal" class="cost-2-3"><img src="img/normal.png" alt="normal"></li>
+                                            <li value="electric" class="cost-2-3"><img src="img/electric.png" alt="electric"></li>
+                                            <li value="psychic" class="cost-2-3"><img src="img/psychic.png" alt="psychic"></li>
+                                            <li value="fighting" class="cost-2-3"><img src="img/fighting.png" alt="fighting"></li>
+                                            <li value="dark" class="cost-2-3"><img src="img/dark.png" alt="dark"></li>
+                                            <li value="metal" class="cost-2-3"><img src="img/metal.png" alt="metal"></li>
+                                            <li value="no-cost" class="cost-2-3"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
+                                        </ul>
+                                    </div>
+                                    <div class="arrowbox" id="attack-2-cost-3-button">
+                                        <i id="attack-2-3-arrow" class="arrow down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="attacks-selector type-selector">
+                                <div id="attack-2-cost-4" class="dropdown-container attack-dropdown">
+                                    <div class="current-type type-closed">
+                                        <div id="current-cost-2-4">
+                                        </div>
+                                        <ul id="attack-cost-list-2-4" class="dropdown">
+                                            <li value="" class="cost-2-4"></li>
+                                            <li value="grass" class="cost-2-4"><img src="img/grass.png" alt="grass"></li>
+                                            <li value="water" class="cost-2-4"><img src="img/water.png" alt="water"></li>
+                                            <li value="fire" class="cost-2-4"><img src="img/fire.png" alt="fire"></li>
+                                            <li value="normal" class="cost-2-4"><img src="img/normal.png" alt="normal"></li>
+                                            <li value="electric" class="cost-2-4"><img src="img/electric.png" alt="electric"></li>
+                                            <li value="psychic" class="cost-2-4"><img src="img/psychic.png" alt="psychic"></li>
+                                            <li value="fighting" class="cost-2-4"><img src="img/fighting.png" alt="fighting"></li>
+                                            <li value="dark" class="cost-2-4"><img src="img/dark.png" alt="dark"></li>
+                                            <li value="metal" class="cost-2-4"><img src="img/metal.png" alt="metal"></li>
+                                            <li value="no-cost" class="cost-2-4"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
+                                        </ul>
+                                    </div>
+                                    <div class="arrowbox" id="attack-2-cost-4-button">
+                                        <i id="attack-2-4-arrow" class="arrow down"></i>
+                                    </div>                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="attack-text-2">Attack Text:</label><br>
+                            <textarea id="attack-text-2" name="attack-text-2" rows="4" cols="40"></textarea><br>
                         </div>
                     </div>
                 </div>
-                
-                <!-------------- ATTACKS TAB --------------->
-                <div class="tab-content" id="attacks-tab">
-                    <!-------------- ATTACK 1 FORM --------------->
-                    <div class="attack-input">
-                        <div id="attack-1-dropdown" class="input-header">
-                            <h2>Attack 1:</h2>
-                            <div class="arrowbox">
-                                <i id="attack-1-arrow" class="arrow down"></i>
+<!-------------- FOOTER FORMS --------------->
+                <div class="footer-input">
+                    <div class="footer-flex">
+                        <div class="weakness-selector type-selector">
+                            <p class="weakness-label">Weakness:</p>
+                            <div id="weakness-dropdown" class="dropdown-container weakness-dropdown">
+                                <div class="current-type">
+                                    <div id="current-weakness">
+                                    </div>
+                                    <ul id="weakness-list" class="dropdown">
+                                        <li value="" class="weakness-type"></li>
+                                        <li value="grass" class="weakness-type"><img src="img/grass.png" alt="grass"></li>
+                                        <li value="water" class="weakness-type"><img src="img/water.png" alt="water"></li>
+                                        <li value="fire" class="weakness-type"><img src="img/fire.png" alt="fire"></li>
+                                        <li value="normal" class="weakness-type"><img src="img/normal.png" alt="normal"></li>
+                                        <li value="electric" class="weakness-type"><img src="img/electric.png" alt="electric"></li>
+                                        <li value="psychic" class="weakness-type"><img src="img/psychic.png" alt="psychic"></li>
+                                        <li value="fighting" class="weakness-type"><img src="img/fighting.png" alt="fighting"></li>
+                                        <li value="dark" class="weakness-type"><img src="img/dark.png" alt="dark"></li>
+                                        <li value="metal" class="weakness-type"><img src="img/metal.png" alt="metal"></li>
+                                    </ul>
+                                </div>
+                                <div class="arrowbox" id="weakness-button">
+                                    <i id="weakness-arrow" class="arrow down"></i>
+                                </div>                                
                             </div>
                         </div>
-                        <div id="attack1" class="attack-body input-body">
-                            <div>
-                                <label for="attack1-name">Name:</label>
-                                <input type="text" id="attack1-name" name="attack1-name" maxlength="20">
-                                <div class="damage-container">
-                                    <label for="attack-damage-1">Damage:</label>
-                                    <input type="number" id="attack-damage-1" name="attack-damage-1"  min="10" max="500" step="10">
-                                </div>
-                            </div>
-                            <div class="attack-cost-container">
-                                <div class="attacks-selector type-selector">
-                                    <p class="attack-1-label">Cost:</p>
-                                    <div id="attack-1-cost-1" class="dropdown-container attack-dropdown">
-                                        <div class="current-type">
-                                            <div id="current-cost-1-1"></div>
-                                            <ul id="attack-cost-list-1-1" class="dropdown">
-                                                <li value="" class="cost-1-1"></li>
-                                                <li value="grass" class="cost-1-1"><img src="img/grass.png" alt="grass"></li>
-                                                <li value="water" class="cost-1-1"><img src="img/water.png" alt="water"></li>
-                                                <li value="fire" class="cost-1-1"><img src="img/fire.png" alt="fire"></li>
-                                                <li value="normal" class="cost-1-1"><img src="img/normal.png" alt="normal"></li>
-                                                <li value="electric" class="cost-1-1"><img src="img/electric.png" alt="electric"></li>
-                                                <li value="psychic" class="cost-1-1"><img src="img/psychic.png" alt="psychic"></li>
-                                                <li value="fighting" class="cost-1-1"><img src="img/fighting.png" alt="fighting"></li>
-                                                <li value="dark" class="cost-1-1"><img src="img/dark.png" alt="dark"></li>
-                                                <li value="metal" class="cost-1-1"><img src="img/metal.png" alt="metal"></li>
-                                                <li value="no-cost" class="cost-1-1"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
-                                            </ul>
-                                        </div>
-                                        <div class="arrowbox" id="attack-1-cost-1-button">
-                                            <i id="attack-1-1-arrow" class="arrow down"></i>
-                                        </div>
+                        <div class="resistance-selector type-selector">
+                            <p class="resistance-label">Resistance:</p>
+                            <div id="resistance-dropdown" class="dropdown-container resistance-dropdown">
+                                <div id="resistance_onclick" class="current-type">
+                                    <div id="current-resistance">
                                     </div>
+                                    <ul id="resistance-list" class="dropdown">
+                                        <li value="" class="resistance-type"></li>
+                                        <li value="grass" class="resistance-type"><img src="img/grass.png" alt="grass"></li>
+                                        <li value="water" class="resistance-type"><img src="img/water.png" alt="water"></li>
+                                        <li value="fire" class="resistance-type"><img src="img/fire.png" alt="fire"></li>
+                                        <li value="normal" class="resistance-type"><img src="img/normal.png" alt="normal"></li>
+                                        <li value="electric" class="resistance-type"><img src="img/electric.png" alt="electric"></li>
+                                        <li value="psychic" class="resistance-type"><img src="img/psychic.png" alt="psychic"></li>
+                                        <li value="fighting" class="resistance-type"><img src="img/fighting.png" alt="fighting"></li>
+                                        <li value="dark" class="resistance-type"><img src="img/dark.png" alt="dark"></li>
+                                        <li value="metal" class="resistance-type"><img src="img/metal.png" alt="metal"></li>
+                                    </ul>
                                 </div>
-                                <div class="attacks-selector type-selector">
-                                    <div id="attack-1-cost-2" class="dropdown-container attack-dropdown">
-                                        <div class="current-type">
-                                            <div id="current-cost-1-2">
-                                            </div>
-                                            <ul id="attack-cost-list-1-2" class="dropdown">
-                                                <li value="" class="cost-1-2"></li>
-                                                <li value="grass" class="cost-1-2"><img src="img/grass.png" alt="grass"></li>
-                                                <li value="water" class="cost-1-2"><img src="img/water.png" alt="water"></li>
-                                                <li value="fire" class="cost-1-2"><img src="img/fire.png" alt="fire"></li>
-                                                <li value="normal" class="cost-1-2"><img src="img/normal.png" alt="normal"></li>
-                                                <li value="electric" class="cost-1-2"><img src="img/electric.png" alt="electric"></li>
-                                                <li value="psychic" class="cost-1-2"><img src="img/psychic.png" alt="psychic"></li>
-                                                <li value="fighting" class="cost-1-2"><img src="img/fighting.png" alt="fighting"></li>
-                                                <li value="dark" class="cost-1-2"><img src="img/dark.png" alt="dark"></li>
-                                                <li value="metal" class="cost-1-2"><img src="img/metal.png" alt="metal"></li>
-                                                <li value="no-cost" class="cost-1-2"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
-                                            </ul>
-                                        </div>
-                                        <div class="arrowbox" id="attack-1-cost-2-button">
-                                            <i id="attack-1-2-arrow" class="arrow down"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="attacks-selector type-selector">
-                                    <div id="attack-1-cost-3" class="dropdown-container attack-dropdown">
-                                        <div class="current-type">
-                                            <div id="current-cost-1-3">
-                                            </div>
-                                            <ul id="attack-cost-list-1-3" class="dropdown">
-                                                <li value="" class="cost-1-3"></li>
-                                                <li value="grass" class="cost-1-3"><img src="img/grass.png" alt="grass"></li>
-                                                <li value="water" class="cost-1-3"><img src="img/water.png" alt="water"></li>
-                                                <li value="fire" class="cost-1-3"><img src="img/fire.png" alt="fire"></li>
-                                                <li value="normal" class="cost-1-3"><img src="img/normal.png" alt="normal"></li>
-                                                <li value="electric" class="cost-1-3"><img src="img/electric.png" alt="electric"></li>
-                                                <li value="psychic" class="cost-1-3"><img src="img/psychic.png" alt="psychic"></li>
-                                                <li value="fighting" class="cost-1-3"><img src="img/fighting.png" alt="fighting"></li>
-                                                <li value="dark" class="cost-1-3"><img src="img/dark.png" alt="dark"></li>
-                                                <li value="metal" class="cost-1-3"><img src="img/metal.png" alt="metal"></li>
-                                                <li value="no-cost" class="cost-1-3"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
-                                            </ul>
-                                        </div>
-                                        <div class="arrowbox" id="attack-1-cost-3-button">
-                                            <i id="attack-1-3-arrow" class="arrow down"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="attacks-selector type-selector">
-                                    <div id="attack-1-cost-4" class="dropdown-container attack-dropdown">
-                                        <div class="current-type">
-                                            <div id="current-cost-1-4">
-                                            </div>
-                                            <ul id="attack-cost-list-1-4" class="dropdown">
-                                                <li value="" class="cost-1-4"></li>
-                                                <li value="grass" class="cost-1-4"><img src="img/grass.png" alt="grass"></li>
-                                                <li value="water" class="cost-1-4"><img src="img/water.png" alt="water"></li>
-                                                <li value="fire" class="cost-1-4"><img src="img/fire.png" alt="fire"></li>
-                                                <li value="normal" class="cost-1-4"><img src="img/normal.png" alt="normal"></li>
-                                                <li value="electric" class="cost-1-4"><img src="img/electric.png" alt="electric"></li>
-                                                <li value="psychic" class="cost-1-4"><img src="img/psychic.png" alt="psychic"></li>
-                                                <li value="fighting" class="cost-1-4"><img src="img/fighting.png" alt="fighting"></li>
-                                                <li value="dark" class="cost-1-4"><img src="img/dark.png" alt="dark"></li>
-                                                <li value="metal" class="cost-1-4"><img src="img/metal.png" alt="metal"></li>
-                                                <li value="no-cost" class="cost-1-4"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
-                                            </ul>
-                                        </div>
-                                        <div class="arrowbox" id="attack-1-cost-4-button">
-                                            <i id="attack-1-4-arrow" class="arrow down"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label for="attack-text-1">Attack Text:</label><br>
-                                <textarea id="attack-text-1" name="attack-text-1" rows="4" cols="40"></textarea><br>
+                                <div class="arrowbox" id="resistance-button">
+                                    <i id="resistance-arrow" class="arrow down"></i>
+                                </div>                            
                             </div>
                         </div>
+                        <div>
+                            <label for="retreat">Retreat:</label>
+                            <select id="retreat" name="retreat">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select> 
+                       </div>    
                     </div>
-                    
-                    <!-------------- ATTACK 2 FORM --------------->
-                    <div class="attack-input">
-                        <div id="attack-2-dropdown" class="input-header">
-                            <h2>Attack 2:</h2>
-                            <div class="arrowbox">
-                                <i id="attack-2-arrow" class="arrow down"></i>
-                            </div>
-                        </div>
-                        <div id="attack2" class="attack-body input-body">
-                            <div>
-                                <label for="attack2-name">Name:</label>
-                                <input type="text" id="attack2-name" name="attack2-name" maxlength="20">
-                                <div class="damage-container">
-                                    <label for="attack-damage-2">Damage:</label>
-                                    <input type="number" id="attack-damage-2" name="attack-damage-2" min="10" max="500"  step="10">
-                                </div>
-                            </div>
-                            <div class="attack-cost-container">
-                                <div class="attacks-selector type-selector">
-                                    <p class="attack-2-label">Cost:</p>
-                                    <div id="attack-2-cost-1" class="dropdown-container attack-dropdown">
-                                        <div class="current-type type-closed">
-                                            <div id="current-cost-2-1"></div>
-                                            <ul id="attack-cost-list-2-1" class="dropdown">
-                                                <li value="" class="cost-2-1"></li>
-                                                <li value="grass" class="cost-2-1"><img src="img/grass.png" alt="grass"></li>
-                                                <li value="water" class="cost-2-1"><img src="img/water.png" alt="water"></li>
-                                                <li value="fire" class="cost-2-1"><img src="img/fire.png" alt="fire"></li>
-                                                <li value="normal" class="cost-2-1"><img src="img/normal.png" alt="normal"></li>
-                                                <li value="electric" class="cost-2-1"><img src="img/electric.png" alt="electric"></li>
-                                                <li value="psychic" class="cost-2-1"><img src="img/psychic.png" alt="psychic"></li>
-                                                <li value="fighting" class="cost-2-1"><img src="img/fighting.png" alt="fighting"></li>
-                                                <li value="dark" class="cost-2-1"><img src="img/dark.png" alt="dark"></li>
-                                                <li value="metal" class="cost-2-1"><img src="img/metal.png" alt="metal"></li>
-                                                <li value="no-cost" class="cost-2-1"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
-                                            </ul>
-                                        </div>
-                                        <div class="arrowbox" id="attack-2-cost-1-button">
-                                            <i id="attack-2-1-arrow" class="arrow down"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="attacks-selector type-selector">
-                                    <div id="attack-2-cost-2" class="dropdown-container attack-dropdown">
-                                        <div class="current-type type-closed">
-                                            <div id="current-cost-2-2">
-                                            </div>
-                                            <ul id="attack-cost-list-2-2" class="dropdown">
-                                                <li value="" class="cost-2-2"></li>
-                                                <li value="grass" class="cost-2-2"><img src="img/grass.png" alt="grass"></li>
-                                                <li value="water" class="cost-2-2"><img src="img/water.png" alt="water"></li>
-                                                <li value="fire" class="cost-2-2"><img src="img/fire.png" alt="fire"></li>
-                                                <li value="normal" class="cost-2-2"><img src="img/normal.png" alt="normal"></li>
-                                                <li value="electric" class="cost-2-2"><img src="img/electric.png" alt="electric"></li>
-                                                <li value="psychic" class="cost-2-2"><img src="img/psychic.png" alt="psychic"></li>
-                                                <li value="fighting" class="cost-2-2"><img src="img/fighting.png" alt="fighting"></li>
-                                                <li value="dark" class="cost-2-2"><img src="img/dark.png" alt="dark"></li>
-                                                <li value="metal" class="cost-2-2"><img src="img/metal.png" alt="metal"></li>
-                                                <li value="no-cost" class="cost-2-2"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
-                                            </ul>
-                                        </div>
-                                        <div class="arrowbox" id="attack-2-cost-2-button">
-                                            <i id="attack-2-2-arrow" class="arrow down"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="attacks-selector type-selector">
-                                    <div id="attack-2-cost-3" class="dropdown-container attack-dropdown">
-                                        <div class="current-type type-closed">
-                                            <div id="current-cost-2-3">
-                                            </div>
-                                            <ul id="attack-cost-list-2-3" class="dropdown">
-                                                <li value="" class="cost-2-3"></li>
-                                                <li value="grass" class="cost-2-3"><img src="img/grass.png" alt="grass"></li>
-                                                <li value="water" class="cost-2-3"><img src="img/water.png" alt="water"></li>
-                                                <li value="fire" class="cost-2-3"><img src="img/fire.png" alt="fire"></li>
-                                                <li value="normal" class="cost-2-3"><img src="img/normal.png" alt="normal"></li>
-                                                <li value="electric" class="cost-2-3"><img src="img/electric.png" alt="electric"></li>
-                                                <li value="psychic" class="cost-2-3"><img src="img/psychic.png" alt="psychic"></li>
-                                                <li value="fighting" class="cost-2-3"><img src="img/fighting.png" alt="fighting"></li>
-                                                <li value="dark" class="cost-2-3"><img src="img/dark.png" alt="dark"></li>
-                                                <li value="metal" class="cost-2-3"><img src="img/metal.png" alt="metal"></li>
-                                                <li value="no-cost" class="cost-2-3"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
-                                            </ul>
-                                        </div>
-                                        <div class="arrowbox" id="attack-2-cost-3-button">
-                                            <i id="attack-2-3-arrow" class="arrow down"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="attacks-selector type-selector">
-                                    <div id="attack-2-cost-4" class="dropdown-container attack-dropdown">
-                                        <div class="current-type type-closed">
-                                            <div id="current-cost-2-4">
-                                            </div>
-                                            <ul id="attack-cost-list-2-4" class="dropdown">
-                                                <li value="" class="cost-2-4"></li>
-                                                <li value="grass" class="cost-2-4"><img src="img/grass.png" alt="grass"></li>
-                                                <li value="water" class="cost-2-4"><img src="img/water.png" alt="water"></li>
-                                                <li value="fire" class="cost-2-4"><img src="img/fire.png" alt="fire"></li>
-                                                <li value="normal" class="cost-2-4"><img src="img/normal.png" alt="normal"></li>
-                                                <li value="electric" class="cost-2-4"><img src="img/electric.png" alt="electric"></li>
-                                                <li value="psychic" class="cost-2-4"><img src="img/psychic.png" alt="psychic"></li>
-                                                <li value="fighting" class="cost-2-4"><img src="img/fighting.png" alt="fighting"></li>
-                                                <li value="dark" class="cost-2-4"><img src="img/dark.png" alt="dark"></li>
-                                                <li value="metal" class="cost-2-4"><img src="img/metal.png" alt="metal"></li>
-                                                <li value="no-cost" class="cost-2-4"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
-                                            </ul>
-                                        </div>
-                                        <div class="arrowbox" id="attack-2-cost-4-button">
-                                            <i id="attack-2-4-arrow" class="arrow down"></i>
-                                        </div>                                    
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label for="attack-text-2">Attack Text:</label><br>
-                                <textarea id="attack-text-2" name="attack-text-2" rows="4" cols="40"></textarea><br>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-------------- GALLERY TAB --------------->
-                <div class="tab-content" id="gallery-tab">
-                    <h3>Your Saved Cards</h3>
-                    <div class="card-gallery" id="saved-cards-gallery">
-                        <!-- Saved cards will be populated here by JavaScript -->
-                        <div class="no-cards-message">No saved cards yet. Create and save a card to see it here!</div>
-                    </div>
-                </div>
-                
-                <!-------------- TEMPLATES TAB --------------->
-                <div class="tab-content" id="templates-tab">
-                    <h3>Card Templates</h3>
-                    <p>Click a template to quickly start with a pre-configured card.</p>
-                    <div class="template-selection">
-                        <div class="card-template" data-template="charizard">
-                            <img src="img/templates/charizard.jpg" alt="Charizard Template">
-                            <p>Fire Type</p>
-                        </div>
-                        <div class="card-template" data-template="blastoise">
-                            <img src="img/templates/blastoise.jpg" alt="Blastoise Template">
-                            <p>Water Type</p>
-                        </div>
-                        <div class="card-template" data-template="venusaur">
-                            <img src="img/templates/venusaur.jpg" alt="Venusaur Template">
-                            <p>Grass Type</p>
-                        </div>
-                        <div class="card-template" data-template="pikachu">
-                            <img src="img/templates/pikachu.jpg" alt="Pikachu Template">
-                            <p>Electric Type</p>
-                        </div>
-                        <div class="card-template" data-template="mewtwo">
-                            <img src="img/templates/mewtwo.jpg" alt="Mewtwo Template">
-                            <p>Psychic Type</p>
-                        </div>
-                        <div class="card-template" data-template="dual">
-                            <img src="img/templates/dual-type.jpg" alt="Dual Type Template">
-                            <p>Dual Type</p>
-                        </div>
-                    </div>
+                    <button id="reload" onclick="location.reload()"><p>↻</p></button>
                 </div>
             </div>
-            
-            <button id="reload" onclick="location.reload()"><p>↻</p></button>
-        </div>
-        
-        <!-------------- CARD MAIN --------------->
-        <div class="img-container">
-            <div class="card-img"></div>
-            <div class="card" id="card">
-                <div class="card-container">
-                    <div class="card-top">
-                        <div class="card-header">
-                            <h1 class="card-name"></h1>
-                            <div class="hp-container">
-                                <h2 class="card-hp"></h2>
-                                <h1 class="hp"></h1>
-                            </div>              
+<!-------------- CARD MAIN --------------->
+            <div class="img-container">
+                <div class="card-img"></div>
+                <div class="card" id="card">
+                    <div class="card-container">
+                        <div class="card-top">
+                            <div class="card-header">
+                                <h1 class="card-name"></h1>
+                                <div class="hp-container">
+                                    <h2 class="card-hp"></h2>
+                                    <h1 class="hp"></h1>
+                                </div>              
+                            </div>
+                            <div class="card-picture">
+                                <div class="small-img"></div>
+                                <p class="evolves-from"><span id="evolves-from-name"></span></p>
+                            </div>
+                            <div class="stats-text">
+                                <p class="pokedex-number"></p>
+                                <p class="category"></p>
+                                <p class="height"></p>
+                                <p class="weight"></p>
+                            </div>
                         </div>
-                        <div class="card-picture">
-                            <div class="small-img"></div>
-                            <p class="evolves-from"><span id="evolves-from-name"></span></p>
-                        </div>
-                        <div class="stats-text">
-                            <p class="pokedex-number"></p>
-                            <p class="category"></p>
-                            <p class="height"></p>
-                            <p class="weight"></p>
-                        </div>
-                    </div>
-                    <div class="card-bottom">
-                        <div class="attack-container"></div>
-                        <div class="card-footer">
-                            <div class="footer-bar">
-                                <div class="weakness">
-                                    <div id="weakness-img"></div>
-                                    <p class="weakness-number"></p>
+                        <div class="card-bottom">
+                            <div class="attack-container"></div>
+                            <div class="card-footer">
+                                <div class="footer-bar">
+                                    <div class="weakness">
+                                        <div id="weakness-img"></div>
+                                        <p class="weakness-number"></p>
+                                    </div>
+                                    <div class="resistance">
+                                        <div id="resistance-img"></div>
+                                        <p class="resistance-number"></p>
+                                    </div>
+                                    <div id="retreat-img"></div>
                                 </div>
-                                <div class="resistance">
-                                    <div id="resistance-img"></div>
-                                    <p class="resistance-number"></p>
-                                </div>
-                                <div id="retreat-img"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         <div class="img-drop-container">
             <div class="img-drop">
-                Drop Pokémon image here.
+                Drop image here.
             </div>
             <div class="img-drop-small">
                 Drop pre-evolution image here.
             </div>
-            
-            <!-------------- ACTION BUTTONS --------------->
-            <div class="action-buttons">
-                <button id="download-card" class="action-button">Download Card</button>
-                <button id="share-card" class="action-button">Share Card</button>
-                <button id="save-to-gallery" class="action-button">Save to Gallery</button>
+            <div id="name-container">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" maxlength="20">
+                <label for="hp">HP:</label>
+                <input type="number" id="hp" name="hp" min="10" max="340" step="10">
             </div>
         </div>
-        
         <img id="pokeball" src="img/pokeball.png" alt="">
     </div>
-    
-    <!-------------- SHARE MODAL --------------->
-    <div id="share-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>Share Your Card</h2>
-            <p>Copy this link to share your card:</p>
-            <div class="share-link-container">
-                <input type="text" id="share-link" readonly>
-                <button id="copy-link" class="action-button">Copy</button>
-            </div>
-            <div class="social-share-buttons">
-                <button class="social-share" data-platform="twitter">Twitter</button>
-                <button class="social-share" data-platform="facebook">Facebook</button>
-                <button class="social-share" data-platform="pinterest">Pinterest</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-------------- SCRIPTS FOR NEW FEATURES --------------->
+
+    <!-- Script to connect stage changes to dual type system -->
     <script>
-        // Tab interface functionality
+        // Connect stage changes to dual type system when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
-            const tabButtons = document.querySelectorAll('.tab-button');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove active class from all buttons and contents
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    
-                    // Add active class to clicked button
-                    button.classList.add('active');
-                    
-                    // Show corresponding content
-                    const tabId = button.getAttribute('data-tab') + '-tab';
-                    document.getElementById(tabId).classList.add('active');
-                });
-            });
-            
-            // Holographic effect toggle
-            const holoToggle = document.getElementById('holo-effect');
-            if (holoToggle) {
-                holoToggle.addEventListener('change', function() {
-                    const card = document.getElementById('card');
-                    if (this.checked) {
-                        card.classList.add('holographic');
-                    } else {
-                        card.classList.remove('holographic');
+            var stageSelect = document.getElementById('stage');
+            if (stageSelect) {
+                stageSelect.addEventListener('change', function() {
+                    var newStage = this.value;
+                    // First update the main card via existing code (already happens)
+                    // Then update the dual type if active
+                    if (window.dualTypeSimple) {a
+                        window.dualTypeSimple.updateOnStageChange(newStage);
                     }
                 });
             }
-            
-            // Card templates
-            const cardTemplates = document.querySelectorAll('.card-template');
-            cardTemplates.forEach(template => {
-                template.addEventListener('click', function() {
-                    const templateName = this.getAttribute('data-template');
-                    loadCardTemplate(templateName);
-                });
-            });
-            
-            // Share button
-            const shareButton = document.getElementById('share-card');
-            const shareModal = document.getElementById('share-modal');
-            const closeModal = document.querySelector('.close-modal');
-            const copyLinkButton = document.getElementById('copy-link');
-            
-            if (shareButton && shareModal) {
-                shareButton.addEventListener('click', function() {
-                    // Generate shareable link
-                    const cardData = generateCardData();
-                    const shareLink = generateShareLink(cardData);
-                    
-                    // Display in modal
-                    document.getElementById('share-link').value = shareLink;
-                    shareModal.style.display = 'block';
-                });
-                
-                closeModal.addEventListener('click', function() {
-                    shareModal.style.display = 'none';
-                });
-                
-                copyLinkButton.addEventListener('click', function() {
-                    const shareLink = document.getElementById('share-link');
-                    shareLink.select();
-                    document.execCommand('copy');
-                    this.textContent = 'Copied!';
-                    setTimeout(() => {
-                        this.textContent = 'Copy';
-                    }, 2000);
-                });
-                
-                // Close when clicking outside
-                window.addEventListener('click', function(event) {
-                    if (event.target === shareModal) {
-                        shareModal.style.display = 'none';
-                    }
-                });
-            }
-            
-            // Save to gallery button
-            const saveToGalleryButton = document.getElementById('save-to-gallery');
-            if (saveToGalleryButton) {
-                saveToGalleryButton.addEventListener('click', function() {
-                    saveCardToGallery();
-                });
-            }
-            
-            // Social share buttons
-            const socialShareButtons = document.querySelectorAll('.social-share');
-            socialShareButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const platform = this.getAttribute('data-platform');
-                    const shareLink = document.getElementById('share-link').value;
-                    const cardName = document.querySelector('.card-name').textContent || 'Pokémon Card';
-                    
-                    let url;
-                    switch(platform) {
-                        case 'twitter':
-                            url = `https://twitter.com/intent/tweet?text=Check out my custom ${cardName} card!&url=${encodeURIComponent(shareLink)}`;
-                            break;
-                        case 'facebook':
-                            url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}`;
-                            break;
-                        case 'pinterest':
-                            url = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareLink)}&description=Custom ${cardName} Pokémon Card`;
-                            break;
-                    }
-                    
-                    window.open(url, '_blank');
-                });
-            });
-            
-            // Local storage functionality
-            const saveProgressButton = document.getElementById('save-progress');
-            const loadProgressButton = document.getElementById('load-progress');
-            
-            if (saveProgressButton && loadProgressButton) {
-                saveProgressButton.addEventListener('click', function() {
-                    const cardData = generateCardData();
-                    localStorage.setItem('savedCardData', JSON.stringify(cardData));
-                    alert('Card progress saved successfully!');
-                });
-                
-                loadProgressButton.addEventListener('click', function() {
-                    const savedData = localStorage.getItem('savedCardData');
-                    if (savedData) {
-                        loadCardData(JSON.parse(savedData));
-                        alert('Card loaded successfully!');
-                    } else {
-                        alert('No saved card found.');
-                    }
-                });
-            }
-            
-            // Export/Import functionality
-            const exportDataButton = document.getElementById('export-data');
-            const importDataButton = document.getElementById('import-data');
-            
-            if (exportDataButton && importDataButton) {
-                exportDataButton.addEventListener('click', function() {
-                    const cardData = generateCardData();
-                    const dataStr = JSON.stringify(cardData);
-                    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-                    
-                    const exportLink = document.createElement('a');
-                    exportLink.setAttribute('href', dataUri);
-                    exportLink.setAttribute('download', 'pokemon-card.json');
-                    document.body.appendChild(exportLink);
-                    exportLink.click();
-                    document.body.removeChild(exportLink);
-                });
-                
-                importDataButton.addEventListener('click', function() {
-                    const input = document.createElement('input');
-                    input.type = 'file';
-                    input.accept = '.json';
-                    
-                    input.onchange = e => {
-                        const file = e.target.files[0];
-                        const reader = new FileReader();
-                        
-                        reader.onload = function(event) {
-                            try {
-                                const cardData = JSON.parse(event.target.result);
-                                loadCardData(cardData);
-                                alert('Card data imported successfully!');
-                            } catch (error) {
-                                alert('Error importing card data. Please check your file.');
-                                console.error(error);
-                            }
-                        };
-                        
-                        reader.readAsText(file);
-                    };
-                    
-                    input.click();
-                });
-            }
-            
-            // Reset card button
-            const resetCardButton = document.getElementById('reset-card');
-            if (resetCardButton) {
-                resetCardButton.addEventListener('click', function() {
-                    if (confirm('Are you sure you want to reset the card? All unsaved changes will be lost.')) {
-                        resetCard();
-                    }
-                });
-            }
-            
-            // Check URL for shared card
-            checkForSharedCard();
-            
-            // Populate gallery
-            populateGallery();
         });
-        
-        // Function to generate card data object
-        function generateCardData() {
-            // Collect all card data
-            const cardData = {
-                name: document.getElementById('name').value,
-                hp: document.getElementById('hp').value,
-                type: document.querySelector('.select-type.highlight')?.getAttribute('value') || '',
-                stage: document.getElementById('stage').value,
-                evolvesFrom: document.getElementById('evolves-from').value,
-                category: document.getElementById('category').value,
-                pokedexNumber: document.getElementById('pokedex-number').value,
-                height: {
-                    feet: document.getElementById('feet').value,
-                    inches: document.getElementById('inches').value
-                },
-                weight: document.getElementById('weight').value,
-                abilityName: document.getElementById('ability-name').value,
-                abilityText: document.getElementById('ability-text').value,
-                attacks: [
-                    {
-                        name: document.getElementById('attack1-name').value,
-                        damage: document.getElementById('attack-damage-1').value,
-                        text: document.getElementById('attack-text-1').value,
-                        costs: attackCosts.attack1
-                    },
-                    {
-                        name: document.getElementById('attack2-name').value,
-                        damage: document.getElementById('attack-damage-2').value,
-                        text: document.getElementById('attack-text-2').value,
-                        costs: attackCosts.attack2
-                    }
-                ],
-                weakness: weakness,
-                resistance: resistance,
-                retreat: document.getElementById('retreat').value,
-                dualType: isDualType,
-                secondType: secondType,
-                holographic: document.getElementById('holo-effect')?.checked || false,
-                // Note: image data is not included as it can be very large
-                // and should be handled separately if needed
-            };
-            
-            return cardData;
-        }
-        
-        // Function to load card data
-        function loadCardData(cardData) {
-            // Set basic info
-            document.getElementById('name').value = cardData.name || '';
-            document.getElementById('hp').value = cardData.hp || '';
-            
-            // Set type
-            if (cardData.type) {
-                const typeElement = document.querySelector(`.select-type[value="${cardData.type}"]`);
-                if (typeElement) {
-                    updateType(typeElement);
-                }
-            }
-            
-            // Set dual type if applicable
-            if (cardData.dualType) {
-                const dualTypeToggle = document.getElementById('dual-type-toggle');
-                if (dualTypeToggle) {
-                    dualTypeToggle.checked = true;
-                    isDualType = true;
-                    
-                    // Show secondary type selector
-                    const secondTypeSelector = document.getElementById('second-type-selector');
-                    if (secondTypeSelector) {
-                        secondTypeSelector.classList.remove('hidden');
-                    }
-                    
-                    // Set secondary type if available
-                    if (cardData.secondType) {
-                        const secondTypeElement = document.querySelector(`.select-second-type[value="${cardData.secondType}"]`);
-                        if (secondTypeElement) {
-                            secondType = cardData.secondType;
-                            
-                            // Remove highlight from all types
-                            document.querySelectorAll('.select-second-type').forEach(el => {
-                                el.classList.remove('highlight');
-                            });
-                            
-                            // Add highlight to selected type
-                            secondTypeElement.classList.add('highlight');
-                            
-                            // Update second layer
-                            if (typeof window.dualTypeSimple !== 'undefined') {
-                                window.dualTypeSimple.updateSecondLayer();
-                            }
-                        }
-                    }
-                }
-            }
-            
-            // Set stage info
-            document.getElementById('stage').value = cardData.stage || 'basic';
-            document.getElementById('evolves-from').value = cardData.evolvesFrom || '';
-            
-            // Set stats
-            document.getElementById('category').value = cardData.category || '';
-            document.getElementById('pokedex-number').value = cardData.pokedexNumber || '';
-            document.getElementById('feet').value = cardData.height?.feet || '';
-            document.getElementById('inches').value = cardData.height?.inches || '';
-            document.getElementById('weight').value = cardData.weight || '';
-            
-            // Set ability
-            document.getElementById('ability-name').value = cardData.abilityName || '';
-            document.getElementById('ability-text').value = cardData.abilityText || '';
-            
-            // Set attacks
-            document.getElementById('attack1-name').value = cardData.attacks[0]?.name || '';
-            document.getElementById('attack-damage-1').value = cardData.attacks[0]?.damage || '';
-            document.getElementById('attack-text-1').value = cardData.attacks[0]?.text || '';
-            
-            document.getElementById('attack2-name').value = cardData.attacks[1]?.name || '';
-            document.getElementById('attack-damage-2').value = cardData.attacks[1]?.damage || '';
-            document.getElementById('attack-text-2').value = cardData.attacks[1]?.text || '';
-            
-            // Set attack costs if available
-            if (cardData.attacks[0]?.costs) {
-                attackCosts.attack1 = cardData.attacks[0].costs;
-            }
-            
-            if (cardData.attacks[1]?.costs) {
-                attackCosts.attack2 = cardData.attacks[1].costs;
-            }
-            
-            // Set weakness, resistance, retreat
-            weakness = cardData.weakness || '';
-            resistance = cardData.resistance || '';
-            document.getElementById('retreat').value = cardData.retreat || '0';
-            
-            // Set holographic effect if applicable
-            const holoToggle = document.getElementById('holo-effect');
-            if (holoToggle) {
-                holoToggle.checked = cardData.holographic || false;
-                
-                if (cardData.holographic) {
-                    document.getElementById('card').classList.add('holographic');
-                } else {
-                    document.getElementById('card').classList.remove('holographic');
-                }
-            }
-            
-            // Update the card display
-            updateContent();
-        }
-        
-        // Function to reset card
-        function resetCard() {
-            // Reset form elements
-            document.querySelectorAll('input[type="text"], input[type="number"], textarea').forEach(input => {
-                input.value = '';
-            });
-            
-            // Reset selects
-            document.getElementById('stage').value = 'basic';
-            document.getElementById('retreat').value = '0';
-            
-            // Reset type selection
-            document.querySelectorAll('.select-type, .select-second-type').forEach(typeEl => {
-                typeEl.classList.remove('highlight');
-            });
-            
-            // Reset dual type
-            const dualTypeToggle = document.getElementById('dual-type-toggle');
-            if (dualTypeToggle) {
-                dualTypeToggle.checked = false;
-                
-                const secondTypeSelector = document.getElementById('second-type-selector');
-                if (secondTypeSelector) {
-                    secondTypeSelector.classList.add('hidden');
-                }
-            }
-            
-            // Reset global variables
-            isDualType = false;
-            secondType = '';
-            weakness = '';
-            resistance = '';
-            attackCosts = {
-                attack1: ['', '', '', ''],
-                attack2: ['', '', '', '']
-            };
-            
-            // Clear attack costs display
-            for (let i = 1; i <= 4; i++) {
-                document.getElementById(`current-cost-1-${i}`).innerHTML = '';
-                document.getElementById(`current-cost-2-${i}`).innerHTML = '';
-            }
-            
-            // Clear weakness and resistance
-            document.getElementById('current-weakness').innerHTML = '';
-            document.getElementById('current-resistance').innerHTML = '';
-            
-            // Reset holographic effect
-            const holoToggle = document.getElementById('holo-effect');
-            if (holoToggle) {
-                holoToggle.checked = false;
-                document.getElementById('card').classList.remove('holographic');
-            }
-            
-            // Clear images
-            document.querySelector('.card-img').innerHTML = '';
-            document.querySelector('.small-img').innerHTML = '';
-            
-            // Reset drop areas
-            document.querySelector('.img-drop').textContent = 'Drop Pokémon image here.';
-            document.querySelector('.img-drop-small').textContent = 'Drop pre-evolution image here.';
-            
-            // Update the card display
-            updateContent();
-        }
-        
-        // Function to load card template
-        function loadCardTemplate(template) {
-            // Reset card first
-            resetCard();
-            
-            // Load template data based on selection
-            switch(template) {
-                case 'charizard':
-                    loadCharizardTemplate();
-                    break;
-                case 'blastoise':
-                    loadBlastoiseTemplate();
-                    break;
-                case 'venusaur':
-                    loadVenusaurTemplate();
-                    break;
-                case 'pikachu':
-                    loadPikachuTemplate();
-                    break;
-                case 'mewtwo':
-                    loadMewtwoTemplate();
-                    break;
-                case 'dual':
-                    loadDualTypeTemplate();
-                    break;
-            }
-        }
-        
-        // Template data functions
-        function loadCharizardTemplate() {
-            // Basic info
-            document.getElementById('name').value = 'Charizard';
-            document.getElementById('hp').value = '220';
-            
-            // Set type to fire
-            const fireType = document.querySelector('.select-type[value="fire"]');
-            if (fireType) updateType(fireType);
-            
-            // Set stage 2
-            document.getElementById('stage').value = 'stage-2';
-            document.getElementById('evolves-from').value = 'Charmeleon';
-            
-            // Set stats
-            document.getElementById('category').value = 'Flame';
-            document.getElementById('pokedex-number').value = '6';
-            document.getElementById('feet').value = '5';
-            document.getElementById('inches').value = '7';
-            document.getElementById('weight').value = '199.5';
-            
-            // Set ability
-            document.getElementById('ability-name').value = 'Fire Aura';
-            document.getElementById('ability-text').value = 'Once during your turn, you may attach a Fire Energy card from your hand to 1 of your Pokémon.';
-            
-            // Set attacks
-            document.getElementById('attack1-name').value = 'Fire Spin';
-            document.getElementById('attack-damage-1').value = '120';
-            document.getElementById('attack-text-1').value = 'Discard 2 Energy attached to this Pokémon.';
-            
-            document.getElementById('attack2-name').value = 'Inferno Wing';
-            document.getElementById('attack-damage-2').value = '220';
-            document.getElementById('attack-text-2').value = 'This Pokémon does 30 damage to itself.';
-            
-            // Set weakness and resistance
-            weakness = 'water';
-            resistance = 'fighting';
-            document.getElementById('retreat').value = '3';
-            
-            // Update display
-            updateContent();
-            
-            // Switch to Pokemon Info tab
-            document.querySelector('.tab-button[data-tab="pokemon-info"]').click();
-        }
-        
-        function loadBlastoiseTemplate() {
-            // Basic info
-            document.getElementById('name').value = 'Blastoise';
-            document.getElementById('hp').value = '210';
-            
-            // Set type to water
-            const waterType = document.querySelector('.select-type[value="water"]');
-            if (waterType) updateType(waterType);
-            
-            // Set stage 2
-            document.getElementById('stage').value = 'stage-2';
-            document.getElementById('evolves-from').value = 'Wartortle';
-            
-            // Set stats
-            document.getElementById('category').value = 'Shellfish';
-            document.getElementById('pokedex-number').value = '9';
-            document.getElementById('feet').value = '5';
-            document.getElementById('inches').value = '3';
-            document.getElementById('weight').value = '188.5';
-            
-            // Set ability
-            document.getElementById('ability-name').value = 'Deluge';
-            document.getElementById('ability-text').value = 'As often as you like during your turn, you may attach a Water Energy card from your hand to 1 of your Pokémon.';
-            
-            // Set attacks
-            document.getElementById('attack1-name').value = 'Hydro Pump';
-            document.getElementById('attack-damage-1').value = '130';
-            document.getElementById('attack-text-1').value = 'This attack does 30 more damage for each Water Energy attached to this Pokémon beyond 3.';
-            
-            // Set weakness and resistance
-            weakness = 'electric';
-            resistance = 'fire';
-            document.getElementById('retreat').value = '3';
-            
-            // Update display
-            updateContent();
-            
-            // Switch to Pokemon Info tab
-            document.querySelector('.tab-button[data-tab="pokemon-info"]').click();
-        }
-        
-        function loadVenusaurTemplate() {
-            // Basic info
-            document.getElementById('name').value = 'Venusaur';
-            document.getElementById('hp').value = '230';
-            
-            // Set type to grass
-            const grassType = document.querySelector('.select-type[value="grass"]');
-            if (grassType) updateType(grassType);
-            
-            // Set stage 2
-            document.getElementById('stage').value = 'stage-2';
-            document.getElementById('evolves-from').value = 'Ivysaur';
-            
-            // Set stats
-            document.getElementById('category').value = 'Seed';
-            document.getElementById('pokedex-number').value = '3';
-            document.getElementById('feet').value = '6';
-            document.getElementById('inches').value = '7';
-            document.getElementById('weight').value = '220.5';
-            
-            // Set ability
-            document.getElementById('ability-name').value = 'Forest Bloom';
-            document.getElementById('ability-text').value = 'Once during your turn, you may heal 30 damage from each of your Grass Pokémon.';
-            
-            // Set attacks
-            document.getElementById('attack1-name').value = 'Pollen Hazard';
-            document.getElementById('attack-damage-1').value = '120';
-            document.getElementById('attack-text-1').value = 'Your opponent\'s Active Pokémon is now Poisoned and Confused.';
-            
-            document.getElementById('attack2-name').value = 'Solar Beam';
-            document.getElementById('attack-damage-2').value = '180';
-            
-            // Set weakness and resistance
-            weakness = 'fire';
-            resistance = 'water';
-            document.getElementById('retreat').value = '3';
-            
-            // Update display
-            updateContent();
-            
-            // Switch to Pokemon Info tab
-            document.querySelector('.tab-button[data-tab="pokemon-info"]').click();
-        }
-        
-        function loadPikachuTemplate() {
-            // Basic info
-            document.getElementById('name').value = 'Pikachu';
-            document.getElementById('hp').value = '80';
-            
-            // Set type to electric
-            const electricType = document.querySelector('.select-type[value="electric"]');
-            if (electricType) updateType(electricType);
-            
-            // Set basic
-            document.getElementById('stage').value = 'basic';
-            
-            // Set stats
-            document.getElementById('category').value = 'Mouse';
-            document.getElementById('pokedex-number').value = '25';
-            document.getElementById('feet').value = '1';
-            document.getElementById('inches').value = '4';
-            document.getElementById('weight').value = '13.2';
-            
-            // Set attacks
-            document.getElementById('attack1-name').value = 'Quick Attack';
-            document.getElementById('attack-damage-1').value = '20';
-            document.getElementById('attack-text-1').value = 'Flip a coin. If heads, this attack does 20 more damage.';
-            
-            document.getElementById('attack2-name').value = 'Thunderbolt';
-            document.getElementById('attack-damage-2').value = '90';
-            document.getElementById('attack-text-2').value = 'Discard all Energy attached to this Pokémon.';
-            
-            // Set weakness and resistance
-            weakness = 'fighting';
-            resistance = '';
-            document.getElementById('retreat').value = '1';
-            
-            // Update display
-            updateContent();
-            
-            // Switch to Pokemon Info tab
-            document.querySelector('.tab-button[data-tab="pokemon-info"]').click();
-        }
-        
-        function loadMewtwoTemplate() {
-            // Basic info
-            document.getElementById('name').value = 'Mewtwo';
-            document.getElementById('hp').value = '190';
-            
-            // Set type to psychic
-            const psychicType = document.querySelector('.select-type[value="psychic"]');
-            if (psychicType) updateType(psychicType);
-            
-            // Set basic
-            document.getElementById('stage').value = 'basic';
-            
-            // Set stats
-            document.getElementById('category').value = 'Genetic';
-            document.getElementById('pokedex-number').value = '150';
-            document.getElementById('feet').value = '6';
-            document.getElementById('inches').value = '7';
-            document.getElementById('weight').value = '269';
-            
-            // Set ability
-            document.getElementById('ability-name').value = 'Psyshield';
-            document.getElementById('ability-text').value = 'Prevent all effects of your opponent\'s Pokémon\'s Abilities done to this Pokémon.';
-            
-            // Set attacks
-            document.getElementById('attack1-name').value = 'Psystrike';
-            document.getElementById('attack-damage-1').value = '150';
-            document.getElementById('attack-text-1').value = 'Discard an Energy from your hand. If you can\'t discard an Energy card from your hand, this attack does nothing.';
-            
-            // Set weakness and resistance
-            weakness = 'dark';
-            resistance = 'fighting';
-            document.getElementById('retreat').value = '2';
-            
-            // Update display
-            updateContent();
-            
-            // Switch to Pokemon Info tab
-            document.querySelector('.tab-button[data-tab="pokemon-info"]').click();
-        }
-        
-        function loadDualTypeTemplate() {
-            // Basic info
-            document.getElementById('name').value = 'Charizard-GX';
-            document.getElementById('hp').value = '250';
-            
-            // Set primary type to fire
-            const fireType = document.querySelector('.select-type[value="fire"]');
-            if (fireType) updateType(fireType);
-            
-            // Enable dual type
-            const dualTypeToggle = document.getElementById('dual-type-toggle');
-            if (dualTypeToggle) {
-                dualTypeToggle.checked = true;
-                isDualType = true;
-                
-                // Show secondary type selector
-                const secondTypeSelector = document.getElementById('second-type-selector');
-                if (secondTypeSelector) {
-                    secondTypeSelector.classList.remove('hidden');
-                }
-                
-                // Set secondary type to dragon (using dark as proxy since dragon isn't available)
-                const dragonType = document.querySelector('.select-second-type[value="dark"]');
-                if (dragonType) {
-                    // Remove highlight from all types
-                    document.querySelectorAll('.select-second-type').forEach(el => {
-                        el.classList.remove('highlight');
-                    });
-                    
-                    // Add highlight to selected type
-                    dragonType.classList.add('highlight');
-                    
-                    // Set secondary type
-                    secondType = 'dark';
-                    
-                    // Update second layer
-                    if (typeof window.dualTypeSimple !== 'undefined') {
-                        window.dualTypeSimple.updateSecondLayer();
-                    }
-                }
-            }
-            
-            // Set stage 2
-            document.getElementById('stage').value = 'stage-2';
-            document.getElementById('evolves-from').value = 'Charmeleon';
-            
-            // Set stats
-            document.getElementById('category').value = 'Flame';
-            document.getElementById('pokedex-number').value = '6';
-            document.getElementById('feet').value = '5';
-            document.getElementById('inches').value = '7';
-            document.getElementById('weight').value = '199.5';
-            
-            // Set ability
-            document.getElementById('ability-name').value = 'Burning Road';
-            document.getElementById('ability-text').value = 'When you attach a Fire Energy card from your hand to this Pokémon, you may search your deck for up to 2 Fire Energy cards and attach them to this Pokémon. Then, shuffle your deck.';
-            
-            // Set attacks
-            document.getElementById('attack1-name').value = 'Crimson Storm';
-            document.getElementById('attack-damage-1').value = '200';
-            document.getElementById('attack-text-1').value = 'Discard 3 Energy from this Pokémon.';
-            
-            document.getElementById('attack2-name').value = 'Raging Out-GX';
-            document.getElementById('attack-damage-2').value = '300';
-            document.getElementById('attack-text-2').value = 'You can\'t use more than 1 GX attack in a game.';
-            
-            // Set weakness and resistance
-            weakness = 'water';
-            resistance = 'fighting';
-            document.getElementById('retreat').value = '3';
-            
-            // Enable holographic effect if available
-            const holoToggle = document.getElementById('holo-effect');
-            if (holoToggle) {
-                holoToggle.checked = true;
-                document.getElementById('card').classList.add('holographic');
-            }
-            
-            // Update display
-            updateContent();
-            
-            // Switch to Pokemon Info tab
-            document.querySelector('.tab-button[data-tab="pokemon-info"]').click();
-        }
-        
-        // Function to generate share link
-        function generateShareLink(cardData) {
-            // Create base URL
-            const baseUrl = window.location.origin + window.location.pathname;
-            
-            // Encode card data
-            const encodedData = btoa(JSON.stringify(cardData));
-            
-            // Create URL with data
-            return `${baseUrl}?card=${encodedData}`;
-        }
-        
-        // Function to check URL for shared card
-        function checkForSharedCard() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const cardParam = urlParams.get('card');
-            
-            if (cardParam) {
-                try {
-                    const cardData = JSON.parse(atob(cardParam));
-                    loadCardData(cardData);
-                } catch (error) {
-                    console.error('Error loading shared card:', error);
-                }
-            }
-        }
-        
-        // Gallery functions
-        function saveCardToGallery() {
-            // Generate HTML2Canvas preview
-            html2canvas(document.getElementById('card'), {
-                scale: 0.5,
-                backgroundColor: null
-            }).then(canvas => {
-                // Convert to image data
-                const imageData = canvas.toDataURL('image/png');
-                
-                // Generate unique ID
-                const cardId = 'card_' + Date.now();
-                
-                // Get card data
-                const cardData = generateCardData();
-                
-                // Get saved cards from local storage
-                let savedCards = JSON.parse(localStorage.getItem('pokemonCardGallery')) || [];
-                
-                // Add new card
-                savedCards.push({
-                    id: cardId,
-                    name: cardData.name || 'Unnamed Card',
-                    preview: imageData,
-                    data: cardData,
-                    timestamp: Date.now()
-                });
-                
-                // Save back to local storage
-                localStorage.setItem('pokemonCardGallery', JSON.stringify(savedCards));
-                
-                // Update gallery display
-                populateGallery();
-                
-                // Show success message
-                alert('Card saved to gallery!');
-                
-                // Switch to gallery tab
-                document.querySelector('.tab-button[data-tab="gallery"]').click();
-            });
-        }
-        
-        function populateGallery() {
-            const galleryContainer = document.getElementById('saved-cards-gallery');
-            if (!galleryContainer) return;
-            
-            // Get saved cards
-            const savedCards = JSON.parse(localStorage.getItem('pokemonCardGallery')) || [];
-            
-            // Clear gallery
-            galleryContainer.innerHTML = '';
-            
-            if (savedCards.length === 0) {
-                galleryContainer.innerHTML = '<div class="no-cards-message">No saved cards yet. Create and save a card to see it here!</div>';
-                return;
-            }
-            
-            // Add cards to gallery
-            savedCards.forEach(card => {
-                const cardElement = document.createElement('div');
-                cardElement.className = 'gallery-item';
-                cardElement.setAttribute('data-card-id', card.id);
-                
-                const cardImage = document.createElement('img');
-                cardImage.src = card.preview;
-                cardImage.alt = card.name;
-                
-                const cardActions = document.createElement('div');
-                cardActions.className = 'gallery-item-actions';
-                
-                const loadButton = document.createElement('button');
-                loadButton.className = 'gallery-action';
-                loadButton.textContent = 'Load';
-                loadButton.addEventListener('click', () => {
-                    loadCardData(card.data);
-                    document.querySelector('.tab-button[data-tab="pokemon-info"]').click();
-                });
-                
-                const deleteButton = document.createElement('button');
-                deleteButton.className = 'gallery-action';
-                deleteButton.textContent = 'Delete';
-                deleteButton.addEventListener('click', () => {
-                    if (confirm(`Are you sure you want to delete "${card.name}"?`)) {
-                        deleteCardFromGallery(card.id);
-                    }
-                });
-                
-                cardActions.appendChild(loadButton);
-                cardActions.appendChild(deleteButton);
-                
-                cardElement.appendChild(cardImage);
-                cardElement.appendChild(cardActions);
-                
-                galleryContainer.appendChild(cardElement);
-            });
-        }
-        
-        function deleteCardFromGallery(cardId) {
-            // Get saved cards
-            let savedCards = JSON.parse(localStorage.getItem('pokemonCardGallery')) || [];
-            
-            // Filter out the card to delete
-            savedCards = savedCards.filter(card => card.id !== cardId);
-            
-            // Save back to local storage
-            localStorage.setItem('pokemonCardGallery', JSON.stringify(savedCards));
-            
-            // Update gallery display
-            populateGallery();
-        }
-        
-        // Holographic effect CSS (added dynamically to avoid messing with existing styles)
-        const holoStyle = document.createElement('style');
-        holoStyle.textContent = `
-            @keyframes holographic {
-                0% {
-                    background-position: 0% 0%;
-                }
-                100% {
-                    background-position: 100% 100%;
-                }
-            }
-            
-            .holographic::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(
-                    125deg,
-                    rgba(255,255,255,0) 0%,
-                    rgba(255,255,255,0.1) 10%,
-                    rgba(255,255,255,0.4) 20%,
-                    rgba(255,255,255,0.2) 30%,
-                    rgba(255,255,255,0) 40%,
-                    rgba(255,255,255,0) 100%
-                );
-                background-size: 200% 200%;
-                border-radius: 4.5%;
-                mix-blend-mode: overlay;
-                z-index: 20;
-                pointer-events: none;
-                animation: holographic 5s ease infinite alternate;
-            }
-        `;
-        document.head.appendChild(holoStyle);
     </script>
 </body>
 </html>
