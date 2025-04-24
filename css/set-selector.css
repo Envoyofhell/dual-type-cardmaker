@@ -1,0 +1,106 @@
+/* scripts/set-selector.css */
+/**
+ * CSS styles for Pokemon Card Set Selector
+ */
+
+/* Main set selector container */
+.set-input {
+    padding: 0;
+    margin: 0 auto 10px auto;
+    max-width: 390px;
+  }
+  
+  /* Set selector dropdown body */
+  #set-body {
+    height: 0;
+    transition: height 0.3s;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+  }
+  
+  /* Set selector when opened */
+  #set-body.border-bottom {
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--offwhite);
+    border-radius: 10px;
+  }
+  
+  /* Main set dropdown select */
+  #card-set {
+    width: 80%;
+    height: 25px;
+    margin: 5px 0 5px 10px;
+    font-size: 12pt;
+    background-color: white;
+    box-shadow: 0 0 15px var(--darkred) inset;
+    border: 1px solid white;
+    border-radius: 4px;
+    font-family: monospace;
+  }
+  
+  /* Set label styling */
+  label[for="card-set"] {
+    color: white;
+    text-shadow: 1px 0 1px #143b08, 0 1px 1px #1365b3;
+    margin-right: 8px;
+  }
+  
+  /* Focus state for set dropdown */
+  #card-set:focus {
+    outline: 1px solid var(--yellow);
+    border: 1px solid var(--yellow);
+    box-shadow: none;
+  }
+  
+  /* Hover state for set dropdown */
+  #card-set:hover {
+    outline: 1px solid var(--yellow);
+    border: 1px solid var(--yellow);
+    box-shadow: none;
+    background-color: white;
+  }
+  
+  /* Dual set selector container */
+  #dual-set-selector {
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+    padding-bottom: 10px;
+  }
+  
+  /* Hidden state for dual set selector */
+  #dual-set-selector.hidden {
+    display: none;
+  }
+  
+  /* Dual set heading */
+  .dual-set-heading {
+    margin-top: 10px;
+    color: white;
+    text-shadow: 1px 0 1px #143b08, 0 1px 1px #1365b3;
+  }
+  
+  /* Dual set dropdown select */
+  #dual-card-set {
+    width: 80%;
+    height: 25px;
+    font-size: 12pt;
+    background-color: white;
+    box-shadow: 0 0 15px var(--darkred) inset;
+    border: 1px solid white;
+    border-radius: 4px;
+    margin-top: 5px;
+    font-family: monospace;
+  }
+  
+  /* Focus state for dual set dropdown */
+  #dual-card-set:focus,
+  #dual-card-set:hover {
+    outline: 1px solid var(--yellow);
+    border: 1px solid var(--yellow);
+    box-shadow: none;
+    background-color: white;
+  }

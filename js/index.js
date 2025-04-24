@@ -68,108 +68,117 @@ let currentType = 'water',
     resistance = '',
     pastStage = ''
 
+// This code should be added to your existing index.js file
+// It replaces/modifies the existing updateContent function
+
 function updateContent() {
-    document.querySelector('.card-name').innerHTML = $('input[type=text][name=name]').val()
-
-    const hp = $('input[name=hp]').val()
+    document.querySelector('.card-name').innerHTML = $('input[type=text][name=name]').val();
+  
+    const hp = $('input[name=hp]').val();
     if (hp !== '') {
-        document.querySelector('.hp').innerHTML = $('input[name=hp]').val()
-        document.querySelector('.card-hp').innerHTML = 'HP'
+      document.querySelector('.hp').innerHTML = $('input[name=hp]').val();
+      document.querySelector('.card-hp').innerHTML = 'HP';
     }
-
-    const preEvolution = $('input[name=evolves-from]').val()
+  
+    const preEvolution = $('input[name=evolves-from]').val();
     if (preEvolution !== '') {
-        document.getElementById('evolves-from-name').innerHTML = 'Evolves from ' + preEvolution
+      document.getElementById('evolves-from-name').innerHTML = 'Evolves from ' + preEvolution;
     }
-
-    const pokedex = $('input[name=pokedex-number]').val()
+  
+    const pokedex = $('input[name=pokedex-number]').val();
     if (pokedex !== '') {
-        document.querySelector('.pokedex-number').innerHTML = 'NO. ' + pokedex
+      document.querySelector('.pokedex-number').innerHTML = 'NO. ' + pokedex;
     }
-
-    const category = $('input[name=category]').val()
+  
+    const category = $('input[name=category]').val();
     if (category !== '') {
-        document.querySelector('.category').innerHTML = category + ' Pokemon'
+      document.querySelector('.category').innerHTML = category + ' Pokemon';
     }
-
-    const heightInches = $('input[name=inches]').val()
-    const heightFeet = $('input[name=feet]').val()
+  
+    const heightInches = $('input[name=inches]').val();
+    const heightFeet = $('input[name=feet]').val();
     if (heightInches !== '' || heightFeet !== '') {
-        document.querySelector('.height').innerHTML = `HT: ${heightFeet}'${heightInches}"`
+      document.querySelector('.height').innerHTML = `HT: ${heightFeet}'${heightInches}"`;
     }
-
-    const weight = $('input[name=weight]').val()
+  
+    const weight = $('input[name=weight]').val();
     if (weight !== '') {
-        document.querySelector('.weight').innerHTML = `WT: ${weight} lbs.`
+      document.querySelector('.weight').innerHTML = `WT: ${weight} lbs.`;
     }
-
-    const stage = $('select[name=stage]').val()
-
-    if (currentType !== '') {
-        if (pastStage !== '') {
-            document.getElementById('card').classList.remove('card-' + pastType + '-' + pastStage)
-        }
-        document.getElementById('card').classList.add('card-' + currentType + '-' + stage)
-
-        pastType = currentType
+  
+    const stage = $('select[name=stage]').val();
+  
+// Find this part in updateContent and replace it
+if (currentType !== '') {
+    if (typeof window.updateCardBackground === 'function') {
+      // Use the new utility function
+      window.updateCardBackground(currentType, stage);
+    } else {
+      // Fallback to original behavior
+      if (pastStage !== '') {
+        document.getElementById('card').classList.remove('card-' + pastType + '-' + pastStage);
+      }
+      document.getElementById('card').classList.add('card-' + currentType + '-' + stage);
     }
-    pastStage = stage
-
+    pastType = currentType;
+  }
+  pastStage = stage;
+  
     if (pastStage === 'basic') {
-        document.querySelector('.small-img').style.display = 'none'
-        document.querySelector('.evolves-from').style.display = 'none'
+      document.querySelector('.small-img').style.display = 'none';
+      document.querySelector('.evolves-from').style.display = 'none';
     } else {
-        document.querySelector('.small-img').style.display = 'block'
-        document.querySelector('.evolves-from').style.display = 'block'
+      document.querySelector('.small-img').style.display = 'block';
+      document.querySelector('.evolves-from').style.display = 'block';
     }
-
+  
     if (currentType == 'dark') {
-        document.querySelector('body').style.color = 'white'
+      document.querySelector('body').style.color = 'white';
     } else {
-        document.querySelector('body').style.color = '#000'
+      document.querySelector('body').style.color = '#000';
     }
-
-    const attack1 = createAttack1()
-    const attack2 = createAttack2()
-    let ability = ''
+  
+    const attack1 = createAttack1();
+    const attack2 = createAttack2();
+    let ability = '';
     if ($('input[name=ability-name]').val()) {
-        ability = createAbility()
+      ability = createAbility();
     }
-    document.querySelector('.attack-container').replaceChildren(ability, attack1, attack2)
-
+    document.querySelector('.attack-container').replaceChildren(ability, attack1, attack2);
+  
     if (weakness !== '') {
-        const weakImg = document.createElement('img')
-        weakImg.setAttribute('src', 'img/' + weakness + '.png')
-        document.getElementById('weakness-img').replaceChildren(weakImg)
-        document.querySelector('.weakness-number').innerHTML = '×2'
+      const weakImg = document.createElement('img');
+      weakImg.setAttribute('src', 'img/' + weakness + '.png');
+      document.getElementById('weakness-img').replaceChildren(weakImg);
+      document.querySelector('.weakness-number').innerHTML = '×2';
     } else {
-        document.getElementById('weakness-img').replaceChildren('')
-        document.querySelector('.weakness-number').innerHTML = ''
+      document.getElementById('weakness-img').replaceChildren('');
+      document.querySelector('.weakness-number').innerHTML = '';
     }
     if (resistance !== '') {
-        const resistImg = document.createElement('img')
-        resistImg.setAttribute('src', 'img/' + resistance + '.png')
-        document.getElementById('resistance-img').replaceChildren(resistImg)
-        document.querySelector('.resistance-number').innerHTML = '-30'
+      const resistImg = document.createElement('img');
+      resistImg.setAttribute('src', 'img/' + resistance + '.png');
+      document.getElementById('resistance-img').replaceChildren(resistImg);
+      document.querySelector('.resistance-number').innerHTML = '-30';
     } else {
-        document.getElementById('resistance-img').replaceChildren('')
-        document.querySelector('.resistance-number').innerHTML = ''
+      document.getElementById('resistance-img').replaceChildren('');
+      document.querySelector('.resistance-number').innerHTML = '';
     }
-    const retreat = $('select[name=retreat]').val()
-    document.getElementById('retreat-img').replaceChildren('')
-
+    const retreat = $('select[name=retreat]').val();
+    document.getElementById('retreat-img').replaceChildren('');
+  
     for (let i = retreat; i > 0; i--) {
-        const img = document.createElement('img')
-        img.setAttribute('src', 'img/normal.png')
-        document.getElementById('retreat-img').appendChild(img)
+      const img = document.createElement('img');
+      img.setAttribute('src', 'img/normal.png');
+      document.getElementById('retreat-img').appendChild(img);
     }
-    document.querySelector('.card-container').style.display = 'block'
-    document.querySelector('#card').classList.remove('card')
-
+    document.querySelector('.card-container').style.display = 'block';
+    document.querySelector('#card').classList.remove('card');
+  
     setTimeout(() => {
-        updateContent()
-    }, "333")
-}
+      updateContent();
+    }, "333");
+  }
 
 // ***************** INPUT MENU BARS *****************
 

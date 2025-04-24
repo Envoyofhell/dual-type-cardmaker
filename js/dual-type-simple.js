@@ -110,26 +110,72 @@ function updateMaskOnLayer() {
 }
 
 
-// Update the second layer based on selected type
+// Find the updateSecondLayer function and update it
 function updateSecondLayer() {
     if (!secondType || !isDualType) {
-         removeSecondLayer(); // Remove if conditions aren't met
-         return;
+      removeSecondLayer();
+      return;
     }
 
-    removeSecondLayer(); // Remove previous before adding new
+    removeSecondLayer(); // Remove existing layer first
 
     const cardContainer = document.querySelector('#card');
-    if (!cardContainer) return;
+    if (!cardContainer) {
+        console.error("Card container not found.");
+        return;
+    }
 
     const stageSelect = document.getElementById('stage');
     const stage = stageSelect ? stageSelect.value : 'basic';
-    const stageFormatted = stage === 'basic' ? 'Basic' :
-                          stage === 'stage-1' ? 'Stage 1' : 'Stage 2';
-    const stageClass = stage === 'basic' ? 'Basic' :
-                       stage === 'stage-1' ? 'Stage1' : 'Stage2';
-    const secondTypeFormatted = formatTypeName(secondType);
-    const bgImage = `img/${stageFormatted}/SS_${stageClass}_${secondTypeFormatted}.png`;
+
+    let bgImage = '';
+    const currentDualSet = window.dualTypeSet || 'Classic'; // Default to Classic if undefined
+    const setConfig = window.SETS_CONFIG?.[currentDualSet]; // Get config for the dual set
+
+    console.log(`Updating second layer. Set: ${currentDualSet}, Type: ${secondType}, Stage: ${stage}`);
+
+    // --- Revised Path Logic ---
+    if (setConfig && !setConfig.cssClassBased && window.CARD_SETS?.[currentDualSet]) {
+        // Try direct lookup in CARD_SETS first for image-based sets
+        try {
+            const typeData = window.CARD_SETS[currentDualSet].types[secondType]; // Use secondType directly as key
+            const stageData = typeData?.[stage];
+            bgImage = stageData?.path;
+
+            if (bgImage) {
+                console.log(`Found path in CARD_SETS: ${bgImage}`);
+            } else {
+                console.warn(`Image path NOT found in CARD_SETS for: Set='${currentDualSet}', Type='${secondType}', Stage='${stage}'. Check cardsets.js and file names.`);
+                // Optional: You could attempt a fallback here using tryMultiplePathFormats if desired,
+                // but it's often better to fix the data source (cardsets.js / file names)
+                // bgImage = window.tryMultiplePathFormats(currentDualSet, secondType, stage)[0]; // Example fallback (less reliable)
+            }
+        } catch (e) {
+             console.error(`Error accessing CARD_SETS for ${currentDualSet}/${secondType}/${stage}:`, e);
+        }
+
+    } else {
+        // Fallback logic (e.g., for CSS-based sets like Classic, or if CARD_SETS entry is missing)
+        console.log(`Using fallback logic for second layer (Set: ${currentDualSet}, CSS Based: ${setConfig?.cssClassBased}, CARD_SETS missing?: ${!window.CARD_SETS?.[currentDualSet]})`);
+        // Assuming Classic uses CSS classes primarily (as suggested by set-selector.js updateCardFromSet logic)
+        // If you *need* a fallback *image* path for Classic dual types, define it explicitly here.
+        // Example: Using the old hardcoded path (verify this path is correct for your Classic assets if needed)
+        const stageFormatted = stage === 'basic' ? 'Basic' :
+                             stage === 'stage-1' ? 'Stage 1' : 'Stage 2';
+        const stageClass = stage === 'basic' ? 'Basic' :
+                           stage === 'stage-1' ? 'Stage1' : 'Stage2';
+        // Use formatTypeName ONLY for this specific Classic fallback path construction
+        const secondTypeFormatted = formatTypeName(secondType);
+        bgImage = `img/${stageFormatted}/SS_${stageClass}_${secondTypeFormatted}.png`;
+        console.warn(`Using fallback image path for second layer: ${bgImage}. Verify this path if set is CSS based.`);
+    }
+    // --- End Revised Path Logic ---
+
+
+    if (!bgImage) {
+        console.error("Could not determine a valid background image for the second layer. Aborting overlay creation.");
+        return; // Stop if no image path could be found
+    }
 
     const overlay = document.createElement('div');
     overlay.id = 'second-card-layer';
@@ -138,19 +184,20 @@ function updateSecondLayer() {
     overlay.style.left = '0';
     overlay.style.width = '100%';
     overlay.style.height = '100%';
-    overlay.style.backgroundImage = `url(${bgImage})`;
-    overlay.style.backgroundSize = 'contain';
+    // IMPORTANT: Ensure the path is correctly quoted in the url()
+    overlay.style.backgroundImage = `url('${bgImage.replace(/'/g, "%27")}')`; // Basic escaping for single quotes in path
+    overlay.style.backgroundSize = 'contain'; // Or 'cover' depending on needs
     overlay.style.backgroundRepeat = 'no-repeat';
     overlay.style.backgroundPosition = 'center';
-    overlay.style.zIndex = '1';
-    overlay.style.pointerEvents = 'none';
+    overlay.style.zIndex = '1'; // Ensure it's above the base card but below text/UI elements
+    overlay.style.pointerEvents = 'none'; // Allow clicks to pass through
 
     cardContainer.appendChild(overlay);
+    console.log(`Appended second layer with image: ${bgImage}`);
 
-    // Apply the currently selected mask/clip-path *after* adding the layer
+    // Apply mask/clip-path AFTER appending
     updateMaskOnLayer();
-
-    preserveCardFormatting(cardContainer);
+    preserveCardFormatting(cardContainer); // Ensure main card elements are still visible
 }
 
 // Format type name for file paths

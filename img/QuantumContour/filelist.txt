@@ -1,0 +1,175 @@
+ Volume in drive F is Envoy Project X
+ Volume Serial Number is 0670-3612
+
+ Directory of F:\Quantum Contour\000 Completed Sets\01 Base Set HD
+
+04/24/2025  10:40 AM    <DIR>          .
+03/08/2025  04:23 PM    <DIR>          ..
+02/17/2025  04:00 PM       114,242,193 01 Base Set HD.zip
+02/18/2025  02:07 AM    <DIR>          Dark
+02/18/2025  02:07 AM    <DIR>          Dragon
+02/18/2025  02:07 AM    <DIR>          Electric
+02/18/2025  02:07 AM    <DIR>          Fairy
+02/18/2025  02:07 AM    <DIR>          Fighting
+04/24/2025  10:40 AM                 0 filelist.txt
+02/18/2025  02:07 AM    <DIR>          Fire
+02/18/2025  02:07 AM    <DIR>          Grass
+02/18/2025  02:07 AM    <DIR>          Metal
+02/18/2025  02:07 AM    <DIR>          Neutral
+02/18/2025  02:07 AM    <DIR>          Psychic
+02/18/2025  02:07 AM    <DIR>          Trainers
+02/18/2025  02:07 AM    <DIR>          Water
+               2 File(s)    114,242,193 bytes
+
+ Directory of F:\Quantum Contour\000 Completed Sets\01 Base Set HD\Dark
+
+02/18/2025  02:07 AM    <DIR>          .
+04/24/2025  10:40 AM    <DIR>          ..
+02/15/2025  02:50 AM         1,639,768 P - Dark - S0 - R.png
+02/15/2025  02:50 AM         1,871,253 P - Dark - S0.png
+02/15/2025  02:50 AM         1,664,438 P - Dark - S1 - R.png
+02/15/2025  02:50 AM         1,895,954 P - Dark - S1.png
+02/15/2025  02:50 AM         1,667,252 P - Dark - S2 - R.png
+02/15/2025  02:50 AM         1,897,689 P - Dark - S2.png
+               6 File(s)     10,636,354 bytes
+
+ Directory of F:\Quantum Contour\000 Completed Sets\01 Base Set HD\Dragon
+
+02/18/2025  02:07 AM    <DIR>          .
+04/24/2025  10:40 AM    <DIR>          ..
+02/15/2025  02:50 AM         1,737,051 P - Dragon - S0 - R.png
+02/15/2025  02:50 AM         1,685,083 P - Dragon - S0.png
+02/15/2025  02:49 AM         1,765,955 P - Dragon - S1 - R.png
+02/15/2025  02:50 AM         1,714,358 P - Dragon - S1.png
+02/15/2025  02:49 AM         1,768,826 P - Dragon - S2 - R.png
+02/15/2025  02:50 AM         1,716,183 P - Dragon - S2.png
+               6 File(s)     10,387,456 bytes
+
+ Directory of F:\Quantum Contour\000 Completed Sets\01 Base Set HD\Electric
+
+02/18/2025  02:07 AM    <DIR>          .
+04/24/2025  10:40 AM    <DIR>          ..
+02/17/2025  11:12 PM         1,639,177 Havoc Base.png
+02/15/2025  02:47 AM         1,142,457 P- Electric - S0 - R.png
+02/15/2025  02:47 AM         1,024,109 P- Electric - S0.png
+02/15/2025  02:46 AM         1,180,575 P- Electric - S1 - R.png
+02/15/2025  02:47 AM         1,061,971 P- Electric - S1.png
+02/15/2025  02:46 AM         1,181,779 P- Electric - S2 - R.png
+02/15/2025  02:47 AM         1,064,782 P- Electric - S2.png
+02/17/2025  11:06 PM        19,663,771 WIP Havoc.xcf
+               8 File(s)     27,958,621 bytes
+
+ Directory of F:\Quantum Contour\000 Completed Sets\01 Base Set HD\Fairy
+
+02/18/2025  02:07 AM    <DIR>          .
+04/24/2025  10:40 AM    <DIR>          ..
+02/15/2025  02:49 AM         1,586,719 P - Fairy - S0.png
+02/15/2025  02:49 AM         1,617,131 P - Fairy - S1.png
+02/15/2025  02:49 AM         1,619,007 P - Fairy - S2.png
+               3 File(s)      4,822,857 bytes
+
+ Directory of F:\Quantum Contour\000 Completed Sets\01 Base Set HD\Fighting
+
+02/18/2025  02:07 AM    <DIR>          .
+04/24/2025  10:40 AM    <DIR>          ..
+02/15/2025  02:49 AM         1,730,529 P - Fighting - S0 - R.png
+02/15/2025  02:49 AM         1,804,411 P - Fighting - S0.png
+02/15/2025  02:49 AM         1,762,492 P - Fighting - S1 - R.png
+02/15/2025  02:49 AM         1,833,759 P - Fighting - S1.png
+02/15/2025  02:48 AM         1,764,764 P - Fighting - S2 - R.png
+02/15/2025  02:49 AM         1,835,163 P - Fighting - S2.png
+               6 File(s)     10,731,118 bytes
+
+ Directory of F:\Quantum Contour\000 Completed Sets\01 Base Set HD\Fire
+
+02/18/2025  02:07 AM    <DIR>          .
+04/24/2025  10:40 AM    <DIR>          ..
+02/15/2025  02:48 AM         1,723,242 P - Fire - S0 - R.png
+02/15/2025  02:48 AM         1,675,828 P - Fire - S0.png
+02/15/2025  02:48 AM         1,753,438 P - Fire - S1 - R.png
+02/15/2025  02:48 AM         1,708,803 P - Fire - S1.png
+02/15/2025  02:48 AM         1,755,361 P - Fire - S2 - R.png
+02/15/2025  02:48 AM         1,711,394 P - Fire - S2.png
+               6 File(s)     10,328,066 bytes
+
+ Directory of F:\Quantum Contour\000 Completed Sets\01 Base Set HD\Grass
+
+02/18/2025  02:07 AM    <DIR>          .
+04/24/2025  10:40 AM    <DIR>          ..
+02/15/2025  02:47 AM         1,600,205 P- Grass - S0 - R.png
+02/15/2025  02:48 AM         1,500,276 P- Grass - S0.png
+02/15/2025  02:47 AM         1,630,736 P- Grass - S1 - R.png
+02/15/2025  02:48 AM         1,532,178 P- Grass - S1.png
+02/15/2025  02:47 AM         1,632,639 P- Grass - S2 - R.png
+02/15/2025  02:47 AM         1,535,286 P- Grass - S2.png
+               6 File(s)      9,431,320 bytes
+
+ Directory of F:\Quantum Contour\000 Completed Sets\01 Base Set HD\Metal
+
+02/18/2025  02:07 AM    <DIR>          .
+04/24/2025  10:40 AM    <DIR>          ..
+02/15/2025  02:46 AM         1,846,819 P- Metal - S0 - R.png
+02/15/2025  02:46 AM         1,822,849 P- Metal - S0.png
+02/15/2025  02:46 AM         1,875,421 P- Metal - S1 - R.png
+02/15/2025  02:46 AM         1,852,971 P- Metal - S1.png
+02/15/2025  02:46 AM         1,877,698 P- Metal - S2 - R.png
+02/15/2025  02:46 AM         1,855,060 P- Metal - S2.png
+               6 File(s)     11,130,818 bytes
+
+ Directory of F:\Quantum Contour\000 Completed Sets\01 Base Set HD\Neutral
+
+02/18/2025  02:07 AM    <DIR>          .
+04/24/2025  10:40 AM    <DIR>          ..
+02/15/2025  02:46 AM         1,675,078 P- Neutral - S0 - R.png
+02/15/2025  02:46 AM         1,642,540 P- Neutral - S0.png
+02/15/2025  02:45 AM         1,710,531 P- Neutral - S1 - R.png
+02/15/2025  02:46 AM         1,682,415 P- Neutral - S1.png
+02/15/2025  02:45 AM         1,712,592 P- Neutral - S2 - R.png
+02/15/2025  02:46 AM         1,685,120 P- Neutral - S2.png
+               6 File(s)     10,108,276 bytes
+
+ Directory of F:\Quantum Contour\000 Completed Sets\01 Base Set HD\Psychic
+
+02/18/2025  02:07 AM    <DIR>          .
+04/24/2025  10:40 AM    <DIR>          ..
+02/15/2025  02:45 AM         1,609,529 P- Psychic - S0 - R.png
+02/15/2025  02:45 AM         1,585,145 P- Psychic - S0.png
+02/15/2025  02:45 AM         1,641,474 P- Psychic - S1 - R.png
+02/15/2025  02:45 AM         1,615,728 P- Psychic - S1.png
+02/15/2025  02:45 AM         1,643,541 P- Psychic - S2 - R.png
+02/15/2025  02:45 AM         1,617,955 P- Psychic - S2.png
+               6 File(s)      9,713,372 bytes
+
+ Directory of F:\Quantum Contour\000 Completed Sets\01 Base Set HD\Trainers
+
+02/18/2025  02:07 AM    <DIR>          .
+04/24/2025  10:40 AM    <DIR>          ..
+02/14/2025  06:07 PM           363,428 T - Item - FA.png
+02/14/2025  05:26 PM           970,761 T - Item -R.png
+02/14/2025  05:26 PM           730,975 T - Item.png
+02/14/2025  06:07 PM           422,627 T - Stadium - FA.png
+02/14/2025  05:43 PM         1,018,504 T - Stadium - R.png
+02/14/2025  05:50 PM           785,152 T - Stadium.png
+02/14/2025  06:06 PM           369,502 T - Supporter - FA.png
+02/14/2025  03:28 PM           981,220 T - Supporter - R.png
+02/14/2025  05:22 PM           742,210 T - Supporter.png
+02/14/2025  06:07 PM           412,168 T - Tool - FA.png
+02/14/2025  05:59 PM           996,076 T - Tool - R.png
+02/14/2025  05:58 PM           737,088 T - Tool.png
+              12 File(s)      8,529,711 bytes
+
+ Directory of F:\Quantum Contour\000 Completed Sets\01 Base Set HD\Water
+
+02/18/2025  02:07 AM    <DIR>          .
+04/24/2025  10:40 AM    <DIR>          ..
+02/15/2025  02:44 AM         1,997,297 P- Water - S0 - R.png
+02/15/2025  02:45 AM         2,041,911 P- Water - S0.png
+02/15/2025  02:44 AM         2,023,369 P- Water - S1 - R.png
+02/15/2025  02:44 AM         2,064,989 P- Water - S1.png
+02/15/2025  02:44 AM         2,025,588 P- Water - S2 - R.png
+02/15/2025  02:44 AM         2,066,757 P- Water - S2.png
+               6 File(s)     12,219,911 bytes
+
+     Total Files Listed:
+              79 File(s)    250,240,073 bytes
+              38 Dir(s)  929,711,374,336 bytes free

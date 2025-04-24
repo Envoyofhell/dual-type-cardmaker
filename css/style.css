@@ -359,12 +359,16 @@ p.attack-damage {
 }
 
 .footer-bar {
-    position: relative;
+    position: relative; /* Good practice for potential absolute children */
     display: flex;
     flex-direction: row;
-    align-items: center;
-    height: 38%; /* */
+    align-items: center; /* Vertically align flex items */
+    height: 38%;
+    padding-left: 5%; /* Adjust as needed */
+    padding-right: 5%; /* Adjust as needed */
+    box-sizing: border-box;
 }
+
 
 .footer-bar p {
     font-family: Arial, sans-serif; /* */
@@ -375,45 +379,68 @@ p.attack-damage {
     padding-left: 10%; /* */
 }
 
-#retreat-img img,
-#weakness-img img,
-#resistance-img img {
-    position: relative;
-    top: -1px;
-    height: min(18.4px,1.15vw);
-    width: min(18.4px,1.15vw); /* */
-}
-
 .weakness {
-    position: relative;
-    display: flex;
+    position: relative; /* CRITICAL: Makes this the anchor for absolute .resistance */
+    display: flex; /* Keep inner flex for icon/text */
     flex-direction: row;
-    left: 14%; /* */
+    align-items: center;
+    /* Let flexbox determine position, add margin if needed from start */
+    margin-left: 9%; /* Example: Original 14% offset - 5% parent padding */
+    /* No z-index needed, or z-index: 1; */
 }
 
 #weakness-img {
-    display: flex; /* */
-    align-items: center; /* */
+    display: flex;
+    align-items: center;
 }
 
 .resistance {
-    position: absolute;
-    display: flex;
+    position: absolute; /* Position relative to the nearest positioned ancestor (.weakness) */
+    top: 0;             /* Align top edge with .weakness's top edge */
+    left: 0;            /* Align left edge with .weakness's left edge */
+    width: 100%;        /* Optional: Match weakness width */
+    height: 100%;       /* Optional: Match weakness height */
+
+    display: flex;      /* Keep inner flex for icon/text */
     flex-direction: row;
-    left: 41.5%; /* */
+    align-items: center;
+
+    z-index: 2;         /* Place ON TOP of .weakness */
+
+    /* NOTE: margin-left is irrelevant for absolute elements */
 }
 
 #resistance-img {
     display: flex;
-    align-items: center; /* */
+    align-items: center;
 }
 
 #retreat-img {
-    position: absolute;
+    /* Keep as a normal flex item */
     display: flex;
-    flex-direction: row; /* */
-    align-content: center; /* */
-    left: 74%;
+    flex-direction: row;
+    align-items: center;
+    margin-left: auto; /* Push to the right, relative to .weakness */
+    /* z-index: 1; */ /* Optional */
+}
+
+/* --- Image Styles --- */
+#retreat-img img,
+#weakness-img img,
+#resistance-img img {
+    height: min(18.4px, 1.15vw);
+    width: min(18.4px, 1.15vw);
+    display: block;
+    /* No relative positioning or top needed */
+}
+
+/* Optional: Style for text next to icons */
+.weakness p, .resistance p, #retreat-img p {
+    margin-left: 4px;
+    font-size: min(17.6px, 1.1vw);
+    font-weight: bold;
+    color: #111;
+    white-space: nowrap;
 }
 
 /* * * INPUT STYLES * * */
@@ -1049,4 +1076,33 @@ p.focused {
     pointer-events: none;
     animation: holographic 5s ease infinite alternate; /* Ensure infinite loop */
     animation-iteration-count: infinite; /* Explicitly set iteration count */
+}
+
+/* set-selector.css */
+.set-input {
+  padding: 0;
+  margin: 0 auto;
+  max-width: 390px;
+}
+
+#set-body {
+  height: 0;
+  transition: height 0.3s;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  padding-left: 20px;
+}
+
+#set-body.active {
+  height: 50px !important;
+  border-bottom: 3px solid var(--offwhite);
+  border-radius: 10px;
+}
+
+#card-set {
+  width: 80%;
+  margin: 10px 0;
 }

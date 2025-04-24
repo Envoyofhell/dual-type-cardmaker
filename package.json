@@ -1,0 +1,9 @@
+{
+    "name": "pokemon-card-maker",
+    "version": "1.0.0",
+    "description": "Pokemon Card Maker with multiple sets support",
+    "scripts": {
+      "build:paths": "node scripts/buildImagePaths.js",
+      "optimize:images": "node scripts/optimizeImages.js"
+    }
+  }
