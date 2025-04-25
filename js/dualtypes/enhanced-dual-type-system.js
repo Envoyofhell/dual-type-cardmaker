@@ -26,6 +26,8 @@
         { value: 'img/masks/vertical-split.png', label: 'Vertical Split', type: 'mask' },
         { value: 'img/masks/gradient-fade.png', label: 'Gradient Fade', type: 'mask' },
         { value: 'img/masks/gradient-fade-light.png', label: 'Gradient Fade Light', type: 'mask' },
+        { value: 'img/masks/texturemask.png', label: 'Textured Mask', type: 'mask' },
+        { value: 'img/masks/dark-texturemask.png', label: 'Darker Textured Mask', type: 'mask' },
         { value: 'img/masks/mask-angle.png', label: 'New Diagonal Pattern' },
         { value: 'img/masks/mask-star.png', label: 'Star Pattern' }
     ];
