@@ -17,8 +17,8 @@ function populateMaskSelector(maskSelector) {
         { value: 'img/masks/vertical-split.png', label: 'Vertical Split' },
         { value: 'img/masks/gradient-fade.png', label: 'Gradient Fade' },
         { value: 'img/masks/circle-center.png', label: 'Circle Center' },
-        { value: 'img/masks/zigzag.png', label: 'Zigzag Pattern' },
-        { value: 'img/masks/dots.png', label: 'Dotted Pattern' }
+        { value: 'img/masks/mask-angle.png', label: 'New Diagonal Pattern' },
+        { value: 'img/masks/mask-star.png', label: 'Star Pattern' }
     ];
     
     // Add options to selector

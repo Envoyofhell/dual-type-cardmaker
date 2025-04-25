@@ -12,8 +12,8 @@ const MASK_OPTIONS = [
     { value: 'img/masks/vertical-split.png', label: 'Vertical Split', type: 'mask' },
     { value: 'img/masks/gradient-fade.png', label: 'Gradient Fade', type: 'mask' },
     { value: 'img/masks/circle-center.png', label: 'Circle Center', type: 'mask' },
-    { value: 'img/masks/zigzag.png', label: 'Zigzag Pattern', type: 'mask' },
-    { value: 'img/masks/dots.png', label: 'Dotted Pattern', type: 'mask' }
+    { value: 'img/masks/mask-angle.png', label: 'New Diagonal Pattern' },
+    { value: 'img/masks/mask-star.png', label: 'Star Pattern' }
 ];
 
 // Store blend mode options
