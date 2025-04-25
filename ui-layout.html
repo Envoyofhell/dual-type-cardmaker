@@ -1,0 +1,440 @@
+<!-- ui-layout.html -->
+<!-- 
+  File: ui-layout.html
+  Purpose: Core HTML structure for the new tabbed interface
+  Dependencies: 
+    - css/tab-system.css
+    - js/modules/ui/tabs.js
+  Notes: 
+    This replaces the current monolithic layout with a tabbed, modular system
+-->
+
+<div class="container">
+    <!-- Left side - Card properties/game mechanics -->
+    <div class="panel-left">
+      <!-- Tab navigation for left panel -->
+      <div class="tab-navigation">
+        <button class="tab-button active" data-tab="basic-info">Basic Info</button>
+        <button class="tab-button" data-tab="game-stats">Game Stats</button>
+        <button class="tab-button" data-tab="attacks">Attacks & Abilities</button>
+        <button class="tab-button" data-tab="type-select">Types</button>
+      </div>
+      
+      <!-- Tab content panels for left side -->
+      <div class="tab-content">
+        <!-- Basic Info Panel -->
+        <div class="tab-panel active" id="basic-info-panel">
+          <div class="panel-section">
+            <h3>Card Info</h3>
+            <div class="input-group">
+              <label for="name">Name:</label>
+              <input type="text" id="name" name="name" maxlength="20">
+            </div>
+            <div class="input-group">
+              <label for="hp">HP:</label>
+              <input type="number" id="hp" name="hp" min="10" max="340" step="10">
+            </div>
+            <div class="input-group">
+              <label for="stage">Stage:</label>
+              <select id="stage" name="stage">
+                <option value="basic">Basic</option>
+                <option value="stage-1">Stage 1</option>
+                <option value="stage-2">Stage 2</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="evolves-from">Evolves from:</label>
+              <input type="text" id="evolves-from" name="evolves-from" maxlength="20">
+            </div>
+          </div>
+          
+          <div class="panel-section">
+            <h3>Pokédex Info</h3>
+            <div class="input-group">
+              <label for="category">Category:</label>
+              <input type="text" id="category" name="category">
+            </div>
+            <div class="input-group">
+              <label for="pokedex-number">Pokédex:</label>
+              <input type="number" id="pokedex-number" name="pokedex-number">
+            </div>
+            <div class="input-group">
+              <label for="feet">Height:</label>
+              <input type="number" id="feet" name="feet" placeholder="ft" class="input-small">
+              <input type="number" id="inches" name="inches" placeholder="in" class="input-small">
+            </div>
+            <div class="input-group">
+              <label for="weight">Weight:</label>
+              <input type="number" id="weight" name="weight" placeholder="lbs">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Game Stats Panel -->
+        <div class="tab-panel" id="game-stats-panel">
+          <div class="panel-section">
+            <h3>Weakness & Resistance</h3>
+            <div class="input-group">
+              <label for="weakness-selector">Weakness:</label>
+              <div id="weakness-selector" class="type-selector">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="resistance-selector">Resistance:</label>
+              <div id="resistance-selector" class="type-selector">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="retreat">Retreat Cost:</label>
+              <select id="retreat" name="retreat">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Attacks Panel -->
+        <div class="tab-panel" id="attacks-panel">
+          <div class="panel-section">
+            <h3>Ability</h3>
+            <div class="input-group">
+              <label for="has-ability">Has Ability:</label>
+              <input type="checkbox" id="has-ability" name="has-ability">
+            </div>
+            <div id="ability-inputs" class="conditional-input">
+              <div class="input-group">
+                <label for="ability-name">Name:</label>
+                <input type="text" id="ability-name" name="ability-name">
+              </div>
+              <div class="input-group">
+                <label for="ability-text">Description:</label>
+                <textarea id="ability-text" name="ability-text" rows="4"></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <div class="panel-section">
+            <h3>Attack 1</h3>
+            <div class="input-group">
+              <label for="attack1-name">Name:</label>
+              <input type="text" id="attack1-name" name="attack1-name" maxlength="20">
+            </div>
+            <div class="input-group">
+              <label for="attack-damage-1">Damage:</label>
+              <input type="number" id="attack-damage-1" name="attack-damage-1" min="10" max="500" step="10">
+            </div>
+            <div class="input-group">
+              <label>Energy Cost:</label>
+              <div id="attack-1-energy-cost" class="energy-cost-selector">
+                <!-- Energy selectors will be populated dynamically -->
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="attack-text-1">Description:</label>
+              <textarea id="attack-text-1" name="attack-text-1" rows="4"></textarea>
+            </div>
+          </div>
+          
+          <div class="panel-section">
+            <h3>Attack 2</h3>
+            <div class="input-group">
+              <label for="has-attack2">Has Second Attack:</label>
+              <input type="checkbox" id="has-attack2" name="has-attack2" checked>
+            </div>
+            <div id="attack2-inputs" class="conditional-input">
+              <div class="input-group">
+                <label for="attack2-name">Name:</label>
+                <input type="text" id="attack2-name" name="attack2-name" maxlength="20">
+              </div>
+              <div class="input-group">
+                <label for="attack-damage-2">Damage:</label>
+                <input type="number" id="attack-damage-2" name="attack-damage-2" min="10" max="500" step="10">
+              </div>
+              <div class="input-group">
+                <label>Energy Cost:</label>
+                <div id="attack-2-energy-cost" class="energy-cost-selector">
+                  <!-- Energy selectors will be populated dynamically -->
+                </div>
+              </div>
+              <div class="input-group">
+                <label for="attack-text-2">Description:</label>
+                <textarea id="attack-text-2" name="attack-text-2" rows="4"></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <button id="add-attack-btn" class="action-button">Add Attack</button>
+        </div>
+        
+        <!-- Type Selection Panel -->
+        <div class="tab-panel" id="type-select-panel">
+          <div class="panel-section">
+            <h3>Primary Type</h3>
+            <div id="primary-type-selector" class="type-grid">
+              <!-- Type icons populated dynamically -->
+            </div>
+          </div>
+          
+          <div class="panel-section">
+            <h3>Dual Type</h3>
+            <div class="input-group">
+              <label for="dual-type-toggle">Enable Dual Type:</label>
+              <input type="checkbox" id="dual-type-toggle" name="dual-type-toggle">
+            </div>
+            <div id="secondary-type-selector" class="type-grid hidden">
+              <!-- Type icons populated dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Action buttons -->
+      <div class="action-buttons">
+        <button id="reset-card" class="action-button">Reset Card</button>
+        <button id="download-card-btn" class="action-button">Download Card</button>
+      </div>
+    </div>
+    
+    <!-- Center - Card Preview -->
+    <div class="card-preview-container">
+      <div class="img-container">
+        <div class="card" id="card">
+          <div class="card-container">
+            <div class="card-top">
+              <div class="card-header">
+                <h1 class="card-name"></h1>
+                <div class="hp-container">
+                  <h2 class="card-hp"></h2>
+                  <h1 class="hp"></h1>
+                </div>
+              </div>
+              <div class="card-picture">
+                <div class="small-img"></div>
+                <p class="evolves-from"><span id="evolves-from-name"></span></p>
+              </div>
+              <div class="stats-text">
+                <p class="pokedex-number"></p>
+                <p class="category"></p>
+                <p class="height"></p>
+                <p class="weight"></p>
+              </div>
+            </div>
+            <div class="card-bottom">
+              <div class="attack-container"></div>
+              <div class="card-footer">
+                <div class="footer-bar">
+                  <div class="weakness">
+                    <div id="weakness-img"></div>
+                    <p class="weakness-number"></p>
+                  </div>
+                  <div class="resistance">
+                    <div id="resistance-img"></div>
+                    <p class="resistance-number"></p>
+                  </div>
+                  <div id="retreat-img"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="drag-drop-types">
+        <div class="drag-drop-label">Drag & Drop Types</div>
+        <div class="drag-drop-container">
+          <div class="drag-type" id="primary-type-drop">
+            <span>Primary Type</span>
+            <div class="type-preview"></div>
+          </div>
+          <div class="drag-type" id="secondary-type-drop">
+            <span>Secondary Type</span>
+            <div class="type-preview"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right side - Layers & Effects -->
+    <div class="panel-right">
+      <!-- Tab navigation for right panel -->
+      <div class="tab-navigation">
+        <button class="tab-button active" data-tab="layers">Layers</button>
+        <button class="tab-button" data-tab="effects">Effects</button>
+        <button class="tab-button" data-tab="sets">Card Sets</button>
+      </div>
+      
+      <!-- Tab content panels for right side -->
+      <div class="tab-content">
+        <!-- Layers Panel -->
+        <div class="tab-panel active" id="layers-panel">
+          <div class="panel-section">
+            <h3>Layer Management</h3>
+            <div id="layer-list" class="layer-list">
+              <!-- Layers populated dynamically -->
+            </div>
+            <div class="layer-actions">
+              <button id="add-layer-btn" class="action-button">Add Layer</button>
+            </div>
+          </div>
+          
+          <div class="panel-section" id="layer-properties">
+            <h3>Layer Properties</h3>
+            <div class="input-group">
+              <label for="layer-name">Name:</label>
+              <input type="text" id="layer-name" name="layer-name">
+            </div>
+            <div class="input-group">
+              <label for="layer-opacity">Opacity:</label>
+              <input type="range" id="layer-opacity" name="layer-opacity" min="0" max="100" value="100">
+              <span class="value-display">100%</span>
+            </div>
+            <div class="input-group">
+              <label for="layer-blend-mode">Blend Mode:</label>
+              <select id="layer-blend-mode" name="layer-blend-mode">
+                <option value="normal">Normal</option>
+                <option value="multiply">Multiply</option>
+                <option value="screen">Screen</option>
+                <option value="overlay">Overlay</option>
+                <option value="darken">Darken</option>
+                <option value="lighten">Lighten</option>
+                <option value="color-dodge">Color Dodge</option>
+                <option value="color-burn">Color Burn</option>
+                <option value="hard-light">Hard Light</option>
+                <option value="soft-light">Soft Light</option>
+                <option value="difference">Difference</option>
+                <option value="exclusion">Exclusion</option>
+              </select>
+            </div>
+            <div class="input-group position-controls">
+              <label>Position:</label>
+              <div class="position-inputs">
+                <div>
+                  <label for="layer-x">X:</label>
+                  <input type="number" id="layer-x" name="layer-x" value="0">
+                </div>
+                <div>
+                  <label for="layer-y">Y:</label>
+                  <input type="number" id="layer-y" name="layer-y" value="0">
+                </div>
+              </div>
+            </div>
+            <div class="input-group size-controls">
+              <label>Size:</label>
+              <div class="size-inputs">
+                <div>
+                  <label for="layer-width">W:</label>
+                  <input type="number" id="layer-width" name="layer-width" value="100">
+                </div>
+                <div>
+                  <label for="layer-height">H:</label>
+                  <input type="number" id="layer-height" name="layer-height" value="100">
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="drag-drop-section">
+            <h3>Image Upload</h3>
+            <div class="img-drop" id="layer-image-drop">
+              Drop image here or click to upload
+            </div>
+          </div>
+        </div>
+        
+        <!-- Effects Panel -->
+        <div class="tab-panel" id="effects-panel">
+          <div class="panel-section">
+            <h3>Masks</h3>
+            <div class="mask-selection-container">
+              <label for="mask-selector">Type Mask:</label>
+              <select id="mask-selector" name="mask-selector">
+                <option value="">Default Split (Diagonal)</option>
+                <option value="img/mask.png">Standard Mask</option>
+                <option value="img/masks/horizontal-split.png">Horizontal Split</option>
+                <option value="img/masks/vertical-split.png">Vertical Split</option>
+                <option value="img/masks/gradient-fade.png">Gradient Fade</option>
+                <option value="img/masks/circle-center.png">Circle Center</option>
+              </select>
+            </div>
+            
+            <div class="mask-previews">
+              <!-- Mask previews populated dynamically -->
+            </div>
+          </div>
+          
+          <div class="panel-section">
+            <h3>Blend Modes</h3>
+            <div class="blend-mode-container">
+              <label for="blend-mode-selector">Blend Mode:</label>
+              <select id="blend-mode-selector" name="blend-mode-selector">
+                <option value="normal">Normal</option>
+                <option value="multiply">Multiply</option>
+                <option value="screen">Screen</option>
+                <option value="overlay">Overlay</option>
+                <option value="darken">Darken</option>
+                <option value="lighten">Lighten</option>
+                <option value="color-dodge">Color Dodge</option>
+                <option value="color-burn">Color Burn</option>
+                <option value="hard-light">Hard Light</option>
+                <option value="soft-light">Soft Light</option>
+                <option value="difference">Difference</option>
+                <option value="exclusion">Exclusion</option>
+              </select>
+            </div>
+            
+            <div class="blend-mode-previews">
+              <!-- Blend mode previews populated dynamically -->
+            </div>
+          </div>
+          
+          <div class="panel-section">
+            <h3>Effects</h3>
+            <div class="input-group">
+              <label for="holo-effect">Holographic Effect:</label>
+              <input type="checkbox" id="holo-effect" name="holo-effect">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Sets Panel -->
+        <div class="tab-panel" id="sets-panel">
+          <div class="panel-section">
+            <h3>Card Set Selection</h3>
+            <div class="input-group">
+              <label for="card-set">Primary Card Set:</label>
+              <select id="card-set" name="card-set">
+                <option value="Classic">Original Set</option>
+                <option value="QuantumContour">Quantum Contour</option>
+                <option value="SwordShield">Sword & Shield</option>
+              </select>
+            </div>
+            
+            <div id="dual-set-selector" class="input-group hidden">
+              <label for="dual-card-set">Secondary Card Set:</label>
+              <select id="dual-card-set" name="dual-card-set">
+                <option value="Classic">Original Set</option>
+                <option value="QuantumContour">Quantum Contour</option>
+                <option value="SwordShield">Sword & Shield</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="panel-section">
+            <h3>Custom Elements</h3>
+            <div class="custom-drop-grid">
+              <div id="custom-primary" class="custom-drop-area">Drop Primary Type</div>
+              <div id="custom-secondary" class="custom-drop-area">Drop Secondary Type</div>
+              <div id="custom-mask" class="custom-drop-area">Drop Type Mask</div>
+              <div id="custom-bg" class="custom-drop-area">Drop Custom Background</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

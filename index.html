@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <link rel="stylesheet" href="css/tab-system.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dual-type-enhanced.css">
     <link rel="stylesheet" href="css/set-selector.css">
@@ -19,6 +19,8 @@
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <!-- Add these script tags BEFORE your index.js script but AFTER jQuery -->
+    <link rel="stylesheet" href="css/tab-system.css">
+    <script type="module" src="js/app.js"></script>
     <script src="js/sets.js"></script>
     <script src="js/cardsets.js"></script>
     <script src="js/card-utils.js"></script>
@@ -26,8 +28,8 @@
     <script src="js/index.js" defer></script>
     <script src="js/dualtypes/dual-type-simple.js" defer></script>
     <script src="js/dualtypes/dual-set-selector.js"></script>
-    <script src="js/dualtypes/mask-manager.js" defer></script> <script src="" defer></script>
-    <script src="js/custom-drag-drop.js" defer></script>
+    <script type="module" src="js/dualtypes/mask-manager.js" defer></script> ```
+    <script src="js/custom-drag-and-drop.js" defer></script>
     <script src="js/card-download.js" defer></script>
     <script src="js/dualtypes/enhanced-dual-type-system.js" defer></script>
 
@@ -275,355 +277,446 @@
     </style>
 </head>
 <body>
-    <div id="threejs-bg"></div>
-    <div class="container">
-        <div class="input-container">
-            <img id="logo" src="img/logo.png" alt="Pokemon Card Maker Logo"> <div id="pokemon-info-section"> <div id="name-container">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" maxlength="20"> <label for="hp">HP:</label>
-                    <input type="number" id="hp" name="hp" min="10" max="340" step="10"> </div>
+    <div id="threejs-bg"></div><!-- ui-layout.html -->
+<!-- 
+  File: ui-layout.html
+  Purpose: Core HTML structure for the new tabbed interface
+  Dependencies: 
+    - css/tab-system.css
+    - js/modules/ui/tabs.js
+  Notes: 
+    This replaces the current monolithic layout with a tabbed, modular system
+-->
 
-                <div class="stage-input">
-                    <div id="stage-dropdown" class="input-header closed"> <h2>Stage:</h2>
-                        <div class="arrowbox"> <i id="stage-arrow" class="arrow down"></i> </div>
-                    </div>
-                    <div id="stage-body" class="input-body"> <div>
-                            <label for="stage">Stage:</label>
-                            <select id="stage" name="stage"> <option value="basic">Basic</option>
-                                <option value="stage-1">Stage 1</option> <option value="stage-2">Stage 2</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="evolves-from">Evolves from:</label>
-                            <input type="text" id="evolves-from" name="evolves-from" maxlength="20"> </div>
-                    </div>
-                </div>
-
-                <div class="stats-input">
-                    <div id="stats-dropdown" class="input-header closed"> <h2>Stats:</h2>
-                        <div class="arrowbox"> <i id="stats-arrow" class="arrow down"></i> </div>
-                    </div>
-                    <div id="stats-body" class="input-body"> <div>
-                            <label for="category">Category:</label>
-                            <input type="text" id="category" name="category"> </div>
-                        <div>
-                            <label for="pokedex-number">Pokedex:</label>
-                            <input type="number" id="pokedex-number" name="pokedex-number"> </div>
-                        <div class="input-bottom"> <div class="height-div">
-                                <p class="ht">HT:</p> <input type="number" id="feet" name="feet"><br>
-                                <label for="feet">'</label>
-                                <input type="number" id="inches" name="inches"><br> <label for="inches">"</label>
-                            </div>
-                            <div class="weight-div"> <label for="weight">WT:</label>
-                                <input type="number" id="weight" name="weight"> <p>lbs</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="holo-toggle"> <label for="holo-effect">Holographic Effect:</label>
-                    <input type="checkbox" id="holo-effect" name="holo-effect">
-                </div>
-
-                <div class="action-buttons"> <button id="save-progress" class="action-button">Save Progress</button>
-                    <button id="load-progress" class="action-button">Load Last Save</button> <button id="export-data" class="action-button">Export Data</button>
-                    <button id="import-data" class="action-button">Import Data</button>
-                    <button id="reset-card" class="action-button">Reset Card</button> </div>
+<div class="container">
+    <!-- Left side - Card properties/game mechanics -->
+    <div class="panel-left">
+      <!-- Tab navigation for left panel -->
+      <div class="tab-navigation">
+        <button class="tab-button active" data-tab="basic-info">Basic Info</button>
+        <button class="tab-button" data-tab="game-stats">Game Stats</button>
+        <button class="tab-button" data-tab="attacks">Attacks & Abilities</button>
+        <button class="tab-button" data-tab="type-select">Types</button>
+      </div>
+      
+      <!-- Tab content panels for left side -->
+      <div class="tab-content">
+        <!-- Basic Info Panel -->
+        <div class="tab-panel active" id="basic-info-panel">
+          <div class="panel-section">
+            <h3>Card Info</h3>
+            <div class="input-group">
+              <label for="name">Name:</label>
+              <input type="text" id="name" name="name" maxlength="20">
             </div>
-
-            <div id="card-types-section"> <h3>Primary Type</h3> <div id="type-selector">
-                    <ul id="type-list">
-                        <li value="grass" class="select-type"><img src="img/grass.png" alt="grass"></li> <li value="water" class="select-type"><img src="img/water.png" alt="water"></li> <li value="fire" class="select-type"><img src="img/fire.png" alt="fire"></li>
-                        <li value="normal" class="select-type"><img src="img/normal.png" alt="normal"></li>
-                        <li value="electric" class="select-type"><img src="img/electric.png" alt="electric"></li> <li value="psychic" class="select-type"><img src="img/psychic.png" alt="psychic"></li>
-                        <li value="fighting" class="select-type"><img src="img/fighting.png" alt="fighting"></li>
-                        <li value="dark" class="select-type"><img src="img/dark.png" alt="dark"></li> <li value="metal" class="select-type"><img src="img/metal.png" alt="metal"></li>
-                    </ul>
-                </div>
-
-                <div id="dual-type-container"> <div class="type-toggle">
-                        <label for="dual-type-toggle">Dual Type:</label>
-                        <input type="checkbox" id="dual-type-toggle" name="dual-type-toggle"> </div>
-                    <div id="second-type-selector" class="hidden"> <p>Second Type:</p> <ul id="second-type-list">
-                            <li value="grass" class="select-second-type"><img src="img/grass.png" alt="grass"></li>
-                            <li value="water" class="select-second-type"><img src="img/water.png" alt="water"></li> <li value="fire" class="select-second-type"><img src="img/fire.png" alt="fire"></li>
-                            <li value="normal" class="select-second-type"><img src="img/normal.png" alt="normal"></li>
-                            <li value="electric" class="select-second-type"><img src="img/electric.png" alt="electric"></li> <li value="psychic" class="select-second-type"><img src="img/psychic.png" alt="psychic"></li>
-                            <li value="fighting" class="select-second-type"><img src="img/fighting.png" alt="fighting"></li> <li value="dark" class="select-second-type"><img src="img/dark.png" alt="dark"></li>
-                            <li value="metal" class="select-second-type"><img src="img/metal.png" alt="metal"></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="mask-selection-container">
-                    <label for="mask-selector">Type Mask:</label>
-                    <select id="mask-selector" name="mask-selector">
-                        <option value="img/mask.png">Default Mask (mask.png)</option>
-                        </select>
-                </div>
-
-                <div class="footer-input"> <div class="footer-flex">
-                        <div class="weakness-selector type-selector">
-                            <p class="weakness-label">Weakness:</p>
-                            <div id="weakness-dropdown" class="dropdown-container weakness-dropdown"> <div class="current-type">
-                                    <div id="current-weakness"> </div>
-                                    <ul id="weakness-list" class="dropdown"> <li value="" class="weakness-type"></li> <li value="grass" class="weakness-type"><img src="img/grass.png" alt="grass"></li>
-                                        <li value="water" class="weakness-type"><img src="img/water.png" alt="water"></li> <li value="fire" class="weakness-type"><img src="img/fire.png" alt="fire"></li>
-                                        <li value="normal" class="weakness-type"><img src="img/normal.png" alt="normal"></li> <li value="electric" class="weakness-type"><img src="img/electric.png" alt="electric"></li>
-                                        <li value="psychic" class="weakness-type"><img src="img/psychic.png" alt="psychic"></li> <li value="fighting" class="weakness-type"><img src="img/fighting.png" alt="fighting"></li>
-                                        <li value="dark" class="weakness-type"><img src="img/dark.png" alt="dark"></li> <li value="metal" class="weakness-type"><img src="img/metal.png" alt="metal"></li>
-                                    </ul>
-                                </div>
-                                <div class="arrowbox" id="weakness-button"> <i id="weakness-arrow" class="arrow down"></i> </div>
-                            </div>
-                        </div>
-                        <div class="resistance-selector type-selector"> <p class="resistance-label">Resistance:</p> <div id="resistance-dropdown" class="dropdown-container resistance-dropdown">
-                                <div id="resistance_onclick" class="current-type">
-                                    <div id="current-resistance"> </div>
-                                    <ul id="resistance-list" class="dropdown"> <li value="" class="resistance-type"></li>
-                                        <li value="grass" class="resistance-type"><img src="img/grass.png" alt="grass"></li> <li value="water" class="resistance-type"><img src="img/water.png" alt="water"></li>
-                                        <li value="fire" class="resistance-type"><img src="img/fire.png" alt="fire"></li> <li value="normal" class="resistance-type"><img src="img/normal.png" alt="normal"></li>
-                                        <li value="electric" class="resistance-type"><img src="img/electric.png" alt="electric"></li> <li value="psychic" class="resistance-type"><img src="img/psychic.png" alt="psychic"></li>
-                                        <li value="fighting" class="resistance-type"><img src="img/fighting.png" alt="fighting"></li>
-                                        <li value="dark" class="resistance-type"><img src="img/dark.png" alt="dark"></li> <li value="metal" class="resistance-type"><img src="img/metal.png" alt="metal"></li>
-                                    </ul>
-                                </div>
-                                <div class="arrowbox" id="resistance-button"> <i id="resistance-arrow" class="arrow down"></i> </div>
-                            </div>
-                        </div>
-                        <div> <label for="retreat">Retreat:</label>
-                            <select id="retreat" name="retreat">
-                                <option value="0">0</option> <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option> <option value="4">4</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+            <div class="input-group">
+              <label for="hp">HP:</label>
+              <input type="number" id="hp" name="hp" min="10" max="340" step="10">
             </div>
-
-            <div id="abilities-section"> <div class="ability-input">
-                    <div id="ability-dropdown" class="input-header"> <h2>Ability:</h2>
-                        <div class="arrowbox">
-                            <i id="ability-arrow" class="arrow down"></i> </div>
-                    </div>
-                    <div id="ability-body" class="input-body"> <div> <label for="ability-name">Name:</label>
-                            <input type="text" id="ability-name" name="ability-name"><br>
-                        </div>
-                        <div> <label for="ability-text">Ability Text:</label><br>
-                            <textarea id="ability-text" name="ability-text" rows="4" cols="40"></textarea><br>
-                        </div>
-                    </div>
-                </div>
+            <div class="input-group">
+              <label for="stage">Stage:</label>
+              <select id="stage" name="stage">
+                <option value="basic">Basic</option>
+                <option value="stage-1">Stage 1</option>
+                <option value="stage-2">Stage 2</option>
+              </select>
             </div>
-
-            <div id="attacks-section"> <div class="attack-input">
-                    <div id="attack-1-dropdown" class="input-header"> <h2>Attack 1:</h2>
-                        <div class="arrowbox">
-                            <i id="attack-1-arrow" class="arrow down"></i> </div>
-                    </div>
-                    <div id="attack1" class="attack-body input-body"> <div> <label for="attack1-name">Name:</label>
-                            <input type="text" id="attack1-name" name="attack1-name" maxlength="20">
-                            <div class="damage-container"> <label for="attack-damage-1">Damage:</label>
-                                <input type="number" id="attack-damage-1" name="attack-damage-1" min="10" max="500" step="10">
-                            </div>
-                        </div>
-                        <div class="attack-cost-container"> <div class="attacks-selector type-selector"> <p class="attack-1-label">Cost:</p>
-                                <div id="attack-1-cost-1" class="dropdown-container attack-dropdown"> <div class="current-type">
-                                        <div id="current-cost-1-1"></div> <ul id="attack-cost-list-1-1" class="dropdown"> <li value="" class="cost-1-1"></li>
-                                            <li value="grass" class="cost-1-1"><img src="img/grass.png" alt="grass"></li> <li value="water" class="cost-1-1"><img src="img/water.png" alt="water"></li>
-                                            <li value="fire" class="cost-1-1"><img src="img/fire.png" alt="fire"></li> <li value="normal" class="cost-1-1"><img src="img/normal.png" alt="normal"></li>
-                                            <li value="electric" class="cost-1-1"><img src="img/electric.png" alt="electric"></li> <li value="psychic" class="cost-1-1"><img src="img/psychic.png" alt="psychic"></li>
-                                            <li value="fighting" class="cost-1-1"><img src="img/fighting.png" alt="fighting"></li> <li value="dark" class="cost-1-1"><img src="img/dark.png" alt="dark"></li>
-                                            <li value="metal" class="cost-1-1"><img src="img/metal.png" alt="metal"></li> <li value="no-cost" class="cost-1-1"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
-                                        </ul>
-                                    </div>
-                                    <div class="arrowbox" id="attack-1-cost-1-button"> <i id="attack-1-1-arrow" class="arrow down"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="attacks-selector type-selector"> <div id="attack-1-cost-2" class="dropdown-container attack-dropdown">
-                                    <div class="current-type">
-                                        <div id="current-cost-1-2"></div> <ul id="attack-cost-list-1-2" class="dropdown"> <li value="" class="cost-1-2"></li>
-                                            <li value="grass" class="cost-1-2"><img src="img/grass.png" alt="grass"></li> <li value="water" class="cost-1-2"><img src="img/water.png" alt="water"></li>
-                                            <li value="fire" class="cost-1-2"><img src="img/fire.png" alt="fire"></li> <li value="normal" class="cost-1-2"><img src="img/normal.png" alt="normal"></li>
-                                            <li value="electric" class="cost-1-2"><img src="img/electric.png" alt="electric"></li> <li value="psychic" class="cost-1-2"><img src="img/psychic.png" alt="psychic"></li>
-                                            <li value="fighting" class="cost-1-2"><img src="img/fighting.png" alt="fighting"></li> <li value="dark" class="cost-1-2"><img src="img/dark.png" alt="dark"></li>
-                                            <li value="metal" class="cost-1-2"><img src="img/metal.png" alt="metal"></li> <li value="no-cost" class="cost-1-2"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
-                                        </ul>
-                                    </div>
-                                    <div class="arrowbox" id="attack-1-cost-2-button"> <i id="attack-1-2-arrow" class="arrow down"></i>
-                                    </div>
-                                </div>
-                            </div>
-                             <div class="attacks-selector type-selector"> <div id="attack-1-cost-3" class="dropdown-container attack-dropdown">
-                                    <div class="current-type">
-                                        <div id="current-cost-1-3"></div> <ul id="attack-cost-list-1-3" class="dropdown"> <li value="" class="cost-1-3"></li>
-                                            <li value="grass" class="cost-1-3"><img src="img/grass.png" alt="grass"></li> <li value="water" class="cost-1-3"><img src="img/water.png" alt="water"></li>
-                                            <li value="fire" class="cost-1-3"><img src="img/fire.png" alt="fire"></li> <li value="normal" class="cost-1-3"><img src="img/normal.png" alt="normal"></li>
-                                            <li value="electric" class="cost-1-3"><img src="img/electric.png" alt="electric"></li> <li value="psychic" class="cost-1-3"><img src="img/psychic.png" alt="psychic"></li>
-                                            <li value="fighting" class="cost-1-3"><img src="img/fighting.png" alt="fighting"></li> <li value="dark" class="cost-1-3"><img src="img/dark.png" alt="dark"></li>
-                                            <li value="metal" class="cost-1-3"><img src="img/metal.png" alt="metal"></li> <li value="no-cost" class="cost-1-3"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
-                                        </ul>
-                                    </div>
-                                    <div class="arrowbox" id="attack-1-cost-3-button"> <i id="attack-1-3-arrow" class="arrow down"></i>
-                                    </div>
-                                </div>
-                            </div>
-                             <div class="attacks-selector type-selector"> <div id="attack-1-cost-4" class="dropdown-container attack-dropdown">
-                                    <div class="current-type">
-                                        <div id="current-cost-1-4"></div> <ul id="attack-cost-list-1-4" class="dropdown"> <li value="" class="cost-1-4"></li>
-                                            <li value="grass" class="cost-1-4"><img src="img/grass.png" alt="grass"></li> <li value="water" class="cost-1-4"><img src="img/water.png" alt="water"></li>
-                                            <li value="fire" class="cost-1-4"><img src="img/fire.png" alt="fire"></li> <li value="normal" class="cost-1-4"><img src="img/normal.png" alt="normal"></li>
-                                            <li value="electric" class="cost-1-4"><img src="img/electric.png" alt="electric"></li> <li value="psychic" class="cost-1-4"><img src="img/psychic.png" alt="psychic"></li>
-                                            <li value="fighting" class="cost-1-4"><img src="img/fighting.png" alt="fighting"></li> <li value="dark" class="cost-1-4"><img src="img/dark.png" alt="dark"></li>
-                                            <li value="metal" class="cost-1-4"><img src="img/metal.png" alt="metal"></li> <li value="no-cost" class="cost-1-4"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
-                                        </ul>
-                                    </div>
-                                    <div class="arrowbox" id="attack-1-cost-4-button"> <i id="attack-1-4-arrow" class="arrow down"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div> <label for="attack-text-1">Attack Text:</label><br>
-                            <textarea id="attack-text-1" name="attack-text-1" rows="4" cols="40"></textarea><br>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="attack-input"> <div id="attack-2-dropdown" class="input-header">
-                        <h2>Attack 2:</h2>
-                        <div class="arrowbox"> <i id="attack-2-arrow" class="arrow down"></i>
-                        </div>
-                    </div>
-                    <div id="attack2" class="attack-body input-body"> <div>
-                            <label for="attack2-name">Name:</label>
-                            <input type="text" id="attack2-name" name="attack2-name" maxlength="20"> <div class="damage-container">
-                                <label for="attack-damage-2">Damage:</label>
-                                <input type="number" id="attack-damage-2" name="attack-damage-2" min="10" max="500" step="10"> </div>
-                        </div>
-                        <div class="attack-cost-container"> <div class="attacks-selector type-selector">
-                                <p class="attack-2-label">Cost:</p> <div id="attack-2-cost-1" class="dropdown-container attack-dropdown">
-                                    <div class="current-type type-closed"> <div id="current-cost-2-1"></div>
-                                        <ul id="attack-cost-list-2-1" class="dropdown"> <li value="" class="cost-2-1"></li> <li value="grass" class="cost-2-1"><img src="img/grass.png" alt="grass"></li>
-                                            <li value="water" class="cost-2-1"><img src="img/water.png" alt="water"></li> <li value="fire" class="cost-2-1"><img src="img/fire.png" alt="fire"></li>
-                                            <li value="normal" class="cost-2-1"><img src="img/normal.png" alt="normal"></li> <li value="electric" class="cost-2-1"><img src="img/electric.png" alt="electric"></li>
-                                            <li value="psychic" class="cost-2-1"><img src="img/psychic.png" alt="psychic"></li> <li value="fighting" class="cost-2-1"><img src="img/fighting.png" alt="fighting"></li>
-                                            <li value="dark" class="cost-2-1"><img src="img/dark.png" alt="dark"></li> <li value="metal" class="cost-2-1"><img src="img/metal.png" alt="metal"></li>
-                                            <li value="no-cost" class="cost-2-1"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li> </ul>
-                                    </div>
-                                    <div class="arrowbox" id="attack-2-cost-1-button">
-                                        <i id="attack-2-1-arrow" class="arrow down"></i> </div>
-                                </div>
-                            </div>
-                            <div class="attacks-selector type-selector"> <div id="attack-2-cost-2" class="dropdown-container attack-dropdown">
-                                    <div class="current-type type-closed"> <div id="current-cost-2-2">
-                                        </div> <ul id="attack-cost-list-2-2" class="dropdown"> <li value="" class="cost-2-2"></li>
-                                            <li value="grass" class="cost-2-2"><img src="img/grass.png" alt="grass"></li>
-                                            <li value="water" class="cost-2-2"><img src="img/water.png" alt="water"></li> <li value="fire" class="cost-2-2"><img src="img/fire.png" alt="fire"></li>
-                                            <li value="normal" class="cost-2-2"><img src="img/normal.png" alt="normal"></li> <li value="electric" class="cost-2-2"><img src="img/electric.png" alt="electric"></li>
-                                            <li value="psychic" class="cost-2-2"><img src="img/psychic.png" alt="psychic"></li> <li value="fighting" class="cost-2-2"><img src="img/fighting.png" alt="fighting"></li>
-                                            <li value="dark" class="cost-2-2"><img src="img/dark.png" alt="dark"></li> <li value="metal" class="cost-2-2"><img src="img/metal.png" alt="metal"></li>
-                                            <li value="no-cost" class="cost-2-2"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li> </ul>
-                                    </div>
-                                    <div class="arrowbox" id="attack-2-cost-2-button">
-                                        <i id="attack-2-2-arrow" class="arrow down"></i> </div>
-                                </div>
-                            </div>
-                            <div class="attacks-selector type-selector"> <div id="attack-2-cost-3" class="dropdown-container attack-dropdown">
-                                    <div class="current-type type-closed"> <div id="current-cost-2-3">
-                                        </div> <ul id="attack-cost-list-2-3" class="dropdown"> <li value="" class="cost-2-3"></li>
-                                            <li value="grass" class="cost-2-3"><img src="img/grass.png" alt="grass"></li> <li value="water" class="cost-2-3"><img src="img/water.png" alt="water"></li>
-                                            <li value="fire" class="cost-2-3"><img src="img/fire.png" alt="fire"></li> <li value="normal" class="cost-2-3"><img src="img/normal.png" alt="normal"></li>
-                                            <li value="electric" class="cost-2-3"><img src="img/electric.png" alt="electric"></li> <li value="psychic" class="cost-2-3"><img src="img/psychic.png" alt="psychic"></li>
-                                            <li value="fighting" class="cost-2-3"><img src="img/fighting.png" alt="fighting"></li> <li value="dark" class="cost-2-3"><img src="img/dark.png" alt="dark"></li>
-                                            <li value="metal" class="cost-2-3"><img src="img/metal.png" alt="metal"></li> <li value="no-cost" class="cost-2-3"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li>
-                                        </ul>
-                                    </div>
-                                    <div class="arrowbox" id="attack-2-cost-3-button">
-                                        <i id="attack-2-3-arrow" class="arrow down"></i> </div>
-                                </div>
-                            </div>
-                            <div class="attacks-selector type-selector"> <div id="attack-2-cost-4" class="dropdown-container attack-dropdown">
-                                    <div class="current-type type-closed"> <div id="current-cost-2-4">
-                                        </div> <ul id="attack-cost-list-2-4" class="dropdown"> <li value="" class="cost-2-4"></li>
-                                            <li value="grass" class="cost-2-4"><img src="img/grass.png" alt="grass"></li>
-                                            <li value="water" class="cost-2-4"><img src="img/water.png" alt="water"></li> <li value="fire" class="cost-2-4"><img src="img/fire.png" alt="fire"></li>
-                                            <li value="normal" class="cost-2-4"><img src="img/normal.png" alt="normal"></li> <li value="electric" class="cost-2-4"><img src="img/electric.png" alt="electric"></li>
-                                            <li value="psychic" class="cost-2-4"><img src="img/psychic.png" alt="psychic"></li> <li value="fighting" class="cost-2-4"><img src="img/fighting.png" alt="fighting"></li>
-                                            <li value="dark" class="cost-2-4"><img src="img/dark.png" alt="dark"></li> <li value="metal" class="cost-2-4"><img src="img/metal.png" alt="metal"></li>
-                                            <li value="no-cost" class="cost-2-4"><img src="img/energy/no-cost-energy.png" alt="no_cost"></li> </ul>
-                                    </div>
-                                    <div class="arrowbox" id="attack-2-cost-4-button">
-                                        <i id="attack-2-4-arrow" class="arrow down"></i> </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div> <label for="attack-text-2">Attack Text:</label><br>
-                            <textarea id="attack-text-2" name="attack-text-2" rows="4" cols="40"></textarea><br>
-                        </div>
-                    </div>
-                </div>
+            <div class="input-group">
+              <label for="evolves-from">Evolves from:</label>
+              <input type="text" id="evolves-from" name="evolves-from" maxlength="20">
             </div>
-
-            <div id="gallery-section"> <h3>Your Saved Cards</h3> <div class="card-gallery" id="saved-cards-gallery"> <div class="no-cards-message">No saved cards yet. Create and save a card to see it here!</div> </div>
+          </div>
+          
+          <div class="panel-section">
+            <h3>Pokédex Info</h3>
+            <div class="input-group">
+              <label for="category">Category:</label>
+              <input type="text" id="category" name="category">
             </div>
-
-            <div id="templates-section"> <h3>Card Templates</h3> <p>Click a template to quickly start with a pre-configured card.</p>
-                <div class="template-selection">
-                    <div class="card-template" data-template="charizard"> <img src="img/templates/charizard.jpg" alt="Charizard Template"> <p>Fire Type</p>
-                    </div>
-                    <div class="card-template" data-template="blastoise"> <img src="img/templates/blastoise.jpg" alt="Blastoise Template">
-                        <p>Water Type</p>
-                    </div>
-                    <div class="card-template" data-template="venusaur"> <img src="img/templates/venusaur.jpg" alt="Venusaur Template">
-                        <p>Grass Type</p>
-                    </div>
-                    <div class="card-template" data-template="pikachu"> <img src="img/templates/pikachu.jpg" alt="Pikachu Template">
-                        <p>Electric Type</p>
-                    </div>
-                    <div class="card-template" data-template="mewtwo"> <img src="img/templates/mewtwo.jpg" alt="Mewtwo Template">
-                        <p>Psychic Type</p>
-                    </div>
-                    <div class="card-template" data-template="dual"> <img src="img/templates/dual-type.jpg" alt="Dual Type Template">
-                        <p>Dual Type</p> </div>
-                </div>
+            <div class="input-group">
+              <label for="pokedex-number">Pokédex:</label>
+              <input type="number" id="pokedex-number" name="pokedex-number">
             </div>
-
-            <button id="reload" onclick="location.reload()"><p>↻</p></button> </div>
-
-        <div class="img-container">
-            <div class="card-img"></div> <div class="card" id="card"> <div class="card-container"> <div class="card-top"> <div class="card-header">
-                            <h1 class="card-name"></h1> <div class="hp-container">
-                                <h2 class="card-hp"></h2> <h1 class="hp"></h1> </div>
-                        </div>
-                        <div class="card-picture"> <div class="small-img"></div> <p class="evolves-from"><span id="evolves-from-name"></span></p> </div>
-                        <div class="stats-text"> <p class="pokedex-number"></p> <p class="category"></p> <p class="height"></p>
-                            <p class="weight"></p>
-                        </div>
-                    </div>
-                    <div class="card-bottom"> <div class="attack-container"></div> <div class="card-footer"> <div class="footer-bar"> <div class="weakness">
-                                    <div id="weakness-img"></div> <p class="weakness-number"></p> </div>
-                                <div class="resistance"> <div id="resistance-img"></div> <p class="resistance-number"></p>
-                                </div>
-                                <div id="retreat-img"></div> </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="input-group">
+              <label for="feet">Height:</label>
+              <input type="number" id="feet" name="feet" placeholder="ft" class="input-small">
+              <input type="number" id="inches" name="inches" placeholder="in" class="input-small">
             </div>
+            <div class="input-group">
+              <label for="weight">Weight:</label>
+              <input type="number" id="weight" name="weight" placeholder="lbs">
+            </div>
+          </div>
         </div>
-        <div class="img-drop-container">
-            <div class="img-drop"> Drop Pokémon image here.
+        
+        <!-- Game Stats Panel -->
+        <div class="tab-panel" id="game-stats-panel">
+          <div class="panel-section">
+            <h3>Weakness & Resistance</h3>
+            <div class="input-group">
+              <label for="weakness-selector">Weakness:</label>
+              <div id="weakness-selector" class="type-selector">
+                <!-- Populated dynamically -->
+              </div>
             </div>
-            <div class="img-drop-small"> Drop pre-evolution image here.
+            <div class="input-group">
+              <label for="resistance-selector">Resistance:</label>
+              <div id="resistance-selector" class="type-selector">
+                <!-- Populated dynamically -->
+              </div>
             </div>
-
-            <div class="action-buttons"> <button id="download-card-btn" class="action-button download-btn">Download Card</button> <button id="share-card" class="action-button">Share Card</button>
-                <button id="save-to-gallery" class="action-button">Save to Gallery</button>
+            <div class="input-group">
+              <label for="retreat">Retreat Cost:</label>
+              <select id="retreat" name="retreat">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
             </div>
+          </div>
+        </div>
+        
+        <!-- Attacks Panel -->
+        <div class="tab-panel" id="attacks-panel">
+          <div class="panel-section">
+            <h3>Ability</h3>
+            <div class="input-group">
+              <label for="has-ability">Has Ability:</label>
+              <input type="checkbox" id="has-ability" name="has-ability">
             </div>
-
-        <img id="pokeball" src="img/et2.png" alt=""> </div>
+            <div id="ability-inputs" class="conditional-input">
+              <div class="input-group">
+                <label for="ability-name">Name:</label>
+                <input type="text" id="ability-name" name="ability-name">
+              </div>
+              <div class="input-group">
+                <label for="ability-text">Description:</label>
+                <textarea id="ability-text" name="ability-text" rows="4"></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <div class="panel-section">
+            <h3>Attack 1</h3>
+            <div class="input-group">
+              <label for="attack1-name">Name:</label>
+              <input type="text" id="attack1-name" name="attack1-name" maxlength="20">
+            </div>
+            <div class="input-group">
+              <label for="attack-damage-1">Damage:</label>
+              <input type="number" id="attack-damage-1" name="attack-damage-1" min="10" max="500" step="10">
+            </div>
+            <div class="input-group">
+              <label>Energy Cost:</label>
+              <div id="attack-1-energy-cost" class="energy-cost-selector">
+                <!-- Energy selectors will be populated dynamically -->
+              </div>
+            </div>
+            <div class="input-group">
+              <label for="attack-text-1">Description:</label>
+              <textarea id="attack-text-1" name="attack-text-1" rows="4"></textarea>
+            </div>
+          </div>
+          
+          <div class="panel-section">
+            <h3>Attack 2</h3>
+            <div class="input-group">
+              <label for="has-attack2">Has Second Attack:</label>
+              <input type="checkbox" id="has-attack2" name="has-attack2" checked>
+            </div>
+            <div id="attack2-inputs" class="conditional-input">
+              <div class="input-group">
+                <label for="attack2-name">Name:</label>
+                <input type="text" id="attack2-name" name="attack2-name" maxlength="20">
+              </div>
+              <div class="input-group">
+                <label for="attack-damage-2">Damage:</label>
+                <input type="number" id="attack-damage-2" name="attack-damage-2" min="10" max="500" step="10">
+              </div>
+              <div class="input-group">
+                <label>Energy Cost:</label>
+                <div id="attack-2-energy-cost" class="energy-cost-selector">
+                  <!-- Energy selectors will be populated dynamically -->
+                </div>
+              </div>
+              <div class="input-group">
+                <label for="attack-text-2">Description:</label>
+                <textarea id="attack-text-2" name="attack-text-2" rows="4"></textarea>
+              </div>
+            </div>
+          </div>
+          
+          <button id="add-attack-btn" class="action-button">Add Attack</button>
+        </div>
+        
+        <!-- Type Selection Panel -->
+        <div class="tab-panel" id="type-select-panel">
+          <div class="panel-section">
+            <h3>Primary Type</h3>
+            <div id="primary-type-selector" class="type-grid">
+              <!-- Type icons populated dynamically -->
+            </div>
+          </div>
+          
+          <div class="panel-section">
+            <h3>Dual Type</h3>
+            <div class="input-group">
+              <label for="dual-type-toggle">Enable Dual Type:</label>
+              <input type="checkbox" id="dual-type-toggle" name="dual-type-toggle">
+            </div>
+            <div id="secondary-type-selector" class="type-grid hidden">
+              <!-- Type icons populated dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Action buttons -->
+      <div class="action-buttons">
+        <button id="reset-card" class="action-button">Reset Card</button>
+        <button id="download-card-btn" class="action-button">Download Card</button>
+      </div>
+    </div>
+    
+    <!-- Center - Card Preview -->
+    <div class="card-preview-container">
+      <div class="img-container">
+        <div class="card" id="card">
+          <div class="card-container">
+            <div class="card-top">
+              <div class="card-header">
+                <h1 class="card-name"></h1>
+                <div class="hp-container">
+                  <h2 class="card-hp"></h2>
+                  <h1 class="hp"></h1>
+                </div>
+              </div>
+              <div class="card-picture">
+                <div class="small-img"></div>
+                <p class="evolves-from"><span id="evolves-from-name"></span></p>
+              </div>
+              <div class="stats-text">
+                <p class="pokedex-number"></p>
+                <p class="category"></p>
+                <p class="height"></p>
+                <p class="weight"></p>
+              </div>
+            </div>
+            <div class="card-bottom">
+              <div class="attack-container"></div>
+              <div class="card-footer">
+                <div class="footer-bar">
+                  <div class="weakness">
+                    <div id="weakness-img"></div>
+                    <p class="weakness-number"></p>
+                  </div>
+                  <div class="resistance">
+                    <div id="resistance-img"></div>
+                    <p class="resistance-number"></p>
+                  </div>
+                  <div id="retreat-img"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="drag-drop-types">
+        <div class="drag-drop-label">Drag & Drop Types</div>
+        <div class="drag-drop-container">
+          <div class="drag-type" id="primary-type-drop">
+            <span>Primary Type</span>
+            <div class="type-preview"></div>
+          </div>
+          <div class="drag-type" id="secondary-type-drop">
+            <span>Secondary Type</span>
+            <div class="type-preview"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right side - Layers & Effects -->
+    <div class="panel-right">
+      <!-- Tab navigation for right panel -->
+      <div class="tab-navigation">
+        <button class="tab-button active" data-tab="layers">Layers</button>
+        <button class="tab-button" data-tab="effects">Effects</button>
+        <button class="tab-button" data-tab="sets">Card Sets</button>
+      </div>
+      
+      <!-- Tab content panels for right side -->
+      <div class="tab-content">
+        <!-- Layers Panel -->
+        <div class="tab-panel active" id="layers-panel">
+          <div class="panel-section">
+            <h3>Layer Management</h3>
+            <div id="layer-list" class="layer-list">
+              <!-- Layers populated dynamically -->
+            </div>
+            <div class="layer-actions">
+              <button id="add-layer-btn" class="action-button">Add Layer</button>
+            </div>
+          </div>
+          
+          <div class="panel-section" id="layer-properties">
+            <h3>Layer Properties</h3>
+            <div class="input-group">
+              <label for="layer-name">Name:</label>
+              <input type="text" id="layer-name" name="layer-name">
+            </div>
+            <div class="input-group">
+              <label for="layer-opacity">Opacity:</label>
+              <input type="range" id="layer-opacity" name="layer-opacity" min="0" max="100" value="100">
+              <span class="value-display">100%</span>
+            </div>
+            <div class="input-group">
+              <label for="layer-blend-mode">Blend Mode:</label>
+              <select id="layer-blend-mode" name="layer-blend-mode">
+                <option value="normal">Normal</option>
+                <option value="multiply">Multiply</option>
+                <option value="screen">Screen</option>
+                <option value="overlay">Overlay</option>
+                <option value="darken">Darken</option>
+                <option value="lighten">Lighten</option>
+                <option value="color-dodge">Color Dodge</option>
+                <option value="color-burn">Color Burn</option>
+                <option value="hard-light">Hard Light</option>
+                <option value="soft-light">Soft Light</option>
+                <option value="difference">Difference</option>
+                <option value="exclusion">Exclusion</option>
+              </select>
+            </div>
+            <div class="input-group position-controls">
+              <label>Position:</label>
+              <div class="position-inputs">
+                <div>
+                  <label for="layer-x">X:</label>
+                  <input type="number" id="layer-x" name="layer-x" value="0">
+                </div>
+                <div>
+                  <label for="layer-y">Y:</label>
+                  <input type="number" id="layer-y" name="layer-y" value="0">
+                </div>
+              </div>
+            </div>
+            <div class="input-group size-controls">
+              <label>Size:</label>
+              <div class="size-inputs">
+                <div>
+                  <label for="layer-width">W:</label>
+                  <input type="number" id="layer-width" name="layer-width" value="100">
+                </div>
+                <div>
+                  <label for="layer-height">H:</label>
+                  <input type="number" id="layer-height" name="layer-height" value="100">
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="drag-drop-section">
+            <h3>Image Upload</h3>
+            <div class="img-drop" id="layer-image-drop">
+              Drop image here or click to upload
+            </div>
+          </div>
+        </div>
+        
+        <!-- Effects Panel -->
+        <div class="tab-panel" id="effects-panel">
+          <div class="panel-section">
+            <h3>Masks</h3>
+            <div class="mask-selection-container">
+              <label for="mask-selector">Type Mask:</label>
+              <select id="mask-selector" name="mask-selector">
+                <option value="">Default Split (Diagonal)</option>
+                <option value="img/mask.png">Standard Mask</option>
+                <option value="img/masks/horizontal-split.png">Horizontal Split</option>
+                <option value="img/masks/vertical-split.png">Vertical Split</option>
+                <option value="img/masks/gradient-fade.png">Gradient Fade</option>
+                <option value="img/masks/circle-center.png">Circle Center</option>
+              </select>
+            </div>
+            
+            <div class="mask-previews">
+              <!-- Mask previews populated dynamically -->
+            </div>
+          </div>
+          
+          <div class="panel-section">
+            <h3>Blend Modes</h3>
+            <div class="blend-mode-container">
+              <label for="blend-mode-selector">Blend Mode:</label>
+              <select id="blend-mode-selector" name="blend-mode-selector">
+                <option value="normal">Normal</option>
+                <option value="multiply">Multiply</option>
+                <option value="screen">Screen</option>
+                <option value="overlay">Overlay</option>
+                <option value="darken">Darken</option>
+                <option value="lighten">Lighten</option>
+                <option value="color-dodge">Color Dodge</option>
+                <option value="color-burn">Color Burn</option>
+                <option value="hard-light">Hard Light</option>
+                <option value="soft-light">Soft Light</option>
+                <option value="difference">Difference</option>
+                <option value="exclusion">Exclusion</option>
+              </select>
+            </div>
+            
+            <div class="blend-mode-previews">
+              <!-- Blend mode previews populated dynamically -->
+            </div>
+          </div>
+          
+          <div class="panel-section">
+            <h3>Effects</h3>
+            <div class="input-group">
+              <label for="holo-effect">Holographic Effect:</label>
+              <input type="checkbox" id="holo-effect" name="holo-effect">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Sets Panel -->
+        <div class="tab-panel" id="sets-panel">
+          <div class="panel-section">
+            <h3>Card Set Selection</h3>
+            <div class="input-group">
+              <label for="card-set">Primary Card Set:</label>
+              <select id="card-set" name="card-set">
+                <option value="Classic">Original Set</option>
+                <option value="QuantumContour">Quantum Contour</option>
+                <option value="SwordShield">Sword & Shield</option>
+              </select>
+            </div>
+            
+            <div id="dual-set-selector" class="input-group hidden">
+              <label for="dual-card-set">Secondary Card Set:</label>
+              <select id="dual-card-set" name="dual-card-set">
+                <option value="Classic">Original Set</option>
+                <option value="QuantumContour">Quantum Contour</option>
+                <option value="SwordShield">Sword & Shield</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="panel-section">
+            <h3>Custom Elements</h3>
+            <div class="custom-drop-grid">
+              <div id="custom-primary" class="custom-drop-area">Drop Primary Type</div>
+              <div id="custom-secondary" class="custom-drop-area">Drop Secondary Type</div>
+              <div id="custom-mask" class="custom-drop-area">Drop Type Mask</div>
+              <div id="custom-bg" class="custom-drop-area">Drop Custom Background</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><img id="pokeball" src="img/et2.png" alt=""> </div>
 
     <div id="share-modal" class="modal" style="display: none;"> <div class="modal-content">
             <span class="close-modal">&times;</span>
