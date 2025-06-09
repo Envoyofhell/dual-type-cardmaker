@@ -1,0 +1,182 @@
+<style>
+/* Layer List Styling */
+.layer-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  border: 1px solid rgba(0,0,0,0.1);
+  padding: 5px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.layer-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-left: 3px solid transparent;
+}
+
+.layer-item:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.layer-item.active {
+  background-color: rgba(253, 203, 0, 0.15);
+  border-left-color: var(--yellow);
+}
+
+.layer-icon {
+  width: 28px;
+  height: 28px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.layer-icon img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.layer-info {
+  flex: 1;
+  overflow: hidden;
+  margin-right: 5px;
+}
+
+.layer-name {
+  color: white;
+  font-size: 13px;
+  margin-bottom: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+.layer-type {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.layer-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.layer-controls button {
+  width: 22px;
+  height: 22px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  padding: 0;
+}
+
+.layer-controls svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.layer-controls button:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: var(--yellow);
+}
+
+.layer-controls .layer-delete:hover {
+  color: #e74c3c;
+}
+
+.layer-item.locked .layer-controls button:not(.layer-visibility) {
+  display: none;
+}
+
+.layer-item.hidden-layer {
+  opacity: 0.5;
+}
+
+/* Layer Properties */
+#layer-properties {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 10px;
+  margin-top: 15px;
+}
+
+#layer-properties h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.property-group {
+  margin-bottom: 10px;
+}
+
+.property-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+}
+
+.property-group input[type="text"],
+.property-group input[type="number"],
+.property-group select {
+  width: 100%;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  color: white;
+}
+
+.property-group input[type="range"] {
+  width: calc(100% - 50px);
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.value-display {
+  display: inline-block;
+  width: 45px;
+  text-align: right;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+}
+
+.position-inputs,
+.size-inputs {
+  display: flex;
+  gap: 10px;
+}
+
+.position-inputs > div,
+.size-inputs > div {
+  flex: 1;
+}
+</style>
